@@ -5,7 +5,7 @@
 /***********************
  *       INCLUDES
  ***********************/
-#include "../../../../hw_conf.h"
+#include "hw_conf.h"
 
 #if USE_TMR != 0 && PSP_PIC32MZ != 0
 

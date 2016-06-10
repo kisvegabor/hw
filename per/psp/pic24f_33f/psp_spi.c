@@ -6,7 +6,7 @@
 /*********************
  *      INCLUDES
  *********************/
-#include "../../../../hw_conf.h"
+#include "hw_conf.h"
 #if USE_SPI != 0 && PSP_PIC24F_33F != 0
 
 #include <stddef.h>

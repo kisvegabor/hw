@@ -10,7 +10,7 @@
 #if USE_BUZZER != 0
 
 #include "buzzer.h"
-#include "misc/os/tick.h"
+#include "hw/per/tick.h"
 #include "hw/per/io.h"
 
 

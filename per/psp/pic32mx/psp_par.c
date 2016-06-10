@@ -6,12 +6,11 @@
 /*********************
  *      INCLUDES
  *********************/
-#include "../../../../hw_conf.h"
+#include "hw_conf.h"
 
 #if USE_PARALLEL != 0 && PSP_PIC32MX != 0
 #include <xc.h>
 #include "../psp_par.h"
-#include "../../sys.h"
 
 /*********************
  *      DEFINES

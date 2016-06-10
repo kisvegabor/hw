@@ -14,7 +14,7 @@
 #include <string.h>
 #include "hw/per/spi.h"
 #include "hw/per/io.h"
-#include "misc/os/tick.h"
+#include "hw/per/tick.h"
 #include "ST7565.h"
 
 

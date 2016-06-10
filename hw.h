@@ -1,10 +1,10 @@
 /**
- * @file device.h
+ * @file hw.h
  * 
  */
 
-#ifndef DEVICE_H
-#define DEVICE_H
+#ifndef HW_H
+#define HW_H
 
 /*********************
  *      INCLUDES

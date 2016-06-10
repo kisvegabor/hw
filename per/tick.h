@@ -3,13 +3,13 @@
  * 
  */
 
-#ifndef SYS_H
-#define SYS_H
+#ifndef TICK_H
+#define TICK_H
 
 /*********************
  *      INCLUDES
  *********************/
-#include "misc_conf.h"
+#include "hw_conf.h"
 #if USE_TICK != 0
 
 #include <stdint.h>

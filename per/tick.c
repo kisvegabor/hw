@@ -7,7 +7,6 @@
  *      INCLUDES
  *********************/
 #include "hw_conf.h"
-
 #if USE_TICK != 0
 
 #include <stddef.h>

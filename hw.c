@@ -10,13 +10,10 @@
 #include "per/io.h"
 #include "per/tmr.h"
 #include "per/tick.h"
-#include "per/pwm.h"
 #include "per/serial.h"
 #include "per/par.h"
 #include "per/spi.h"
-#include "per/spim.h"
 #include "per/i2c.h"
-#include "per/adc.h"
 #include "per/tft.h"
 #include "dev/ui/led.h"
 #include "dev/ui/buzzer.h"
@@ -27,11 +24,7 @@
 #include "dev/tp/XPT2046.h"
 #include "dev/tp/FT5406EE8.h"
 #include "dev/tp/mouse.h"
-#include "dev/adc/ads1256.h"
-#include "dev/adc/ads1256_m.h"
-#include "dev/bt/btm41x.h"
-#include "dev/data_store/sdcard.h"
-#include "dev/sens/isl29023.h"
+#include "dev/ext_mem/sdcard.h"
 
 /*********************
  *      DEFINES
@@ -72,10 +65,6 @@ void per_init(void)
     tick_init();
 #endif
     
-#if USE_PWM != 0
-    pwm_init();
-#endif
-
 #if USE_SERIAL != 0
     serial_init();
 #endif
@@ -88,18 +77,9 @@ void per_init(void)
     spi_init();
 #endif
 
-#if USE_SPIM != 0
-    spim_init();
-#endif
-
 #if USE_I2C != 0
     i2c_init();
 #endif
-
-#if USE_ADC != 0
-    adc_init();
-#endif
-    
     
 #if USE_TFT != 0
     tft_init();
@@ -133,10 +113,6 @@ void dev_init(void)
     r61581_init();
 #endif
     
-#if USE_BTM41X != 0
-    btm41x_init();
-#endif
-    
 #if USE_ST7565 != 0
     st7565_init();
 #endif
@@ -152,19 +128,6 @@ void dev_init(void)
 #if USE_MOUSE != 0
     mouse_init();
 #endif
-    
-#if USE_ADS1256 != 0
-    ads1256_init();
-#endif
-    
-#if USE_ADS1256_M != 0
-    ads1256_m_init();
-#endif
-    
-#if USE_ISL29023 != 0
-    isl29023_init();
-#endif
-    
 }
 
 /**********************

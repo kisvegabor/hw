@@ -6,7 +6,7 @@
 /*********************
  *      INCLUDES
  *********************/
-#include "../../../../hw_conf.h"
+#include "hw_conf.h"
 #if PSP_PIC24F_33F != 0 && USE_TFT != 0
 
 #include <xc.h>

@@ -9,7 +9,7 @@
 /*********************
  *      INCLUDES
  *********************/
-#include "../../../hw_conf.h"
+#include "hw_conf.h"
 
 #if USE_PARALLEL != 0 
 

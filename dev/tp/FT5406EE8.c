@@ -11,7 +11,7 @@
 
 #include "hw/per/i2c.h"
 #include "hw/per/io.h"
-#include "misc/os/tick.h"
+#include "hw/per/tick"
 #include "FT5406EE8.h"
 #include <stddef.h>
 #include <stdbool.h>

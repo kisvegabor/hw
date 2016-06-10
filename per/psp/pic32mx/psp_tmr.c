@@ -5,7 +5,7 @@
 /***********************
  *       INCLUDES
  ***********************/
-#include "../../../../hw_conf.h"
+#include "hw_conf.h"
 
 #if USE_TMR != 0 && PSP_PIC32MX != 0
 
@@ -15,7 +15,6 @@
 #include <stddef.h>
 #include <xc.h>
 #include "../../tmr.h"
-#include "../../sys.h"
 
 
 /***********************

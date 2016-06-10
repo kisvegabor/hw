@@ -9,7 +9,7 @@
 /*********************
  *      INCLUDES
  *********************/
-#include "misc_conf.h"
+#include "hw_conf.h"
 #if USE_LOG != 0
 
 /*********************

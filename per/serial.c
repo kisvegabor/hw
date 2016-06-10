@@ -11,7 +11,7 @@
 #include <stddef.h>
 #include <string.h>
 #include "serial.h"
-#include "misc/os/tick.h"
+#include "hw/per/tick.h"
 #include "misc/mem/fifo.h"
 
 /***********************

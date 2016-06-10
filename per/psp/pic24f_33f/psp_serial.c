@@ -5,14 +5,14 @@
 /***********************
  *       INCLUDES
  ***********************/
-#include "../../../../hw_conf.h"
+#include "hw_conf.h"
 #if USE_SERIAL != 0 && PSP_PIC24F_33F != 0
 
 #include <xc.h>
 #include <stddef.h>
 #include "hw/hw.h"
 #include "misc/mem/fifo.h"
-#include "misc/os/tick.h"
+#include "hw/per/tick.h"
 #include "../psp_serial.h"
 
 /***********************
