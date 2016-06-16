@@ -9,9 +9,8 @@
 #ifndef HW_CONF_H
 #define HW_CONF_H
 
-
 /*********************
- *   PERPHRIA CONFIG
+ *   PERIPHERY CONFIG
  *********************/
 
 /*---------------
