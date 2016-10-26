@@ -18,6 +18,7 @@
 /***********************
  *       DEFINES
  ***********************/
+#define SERIAL_DEF_BAUD 9600
 
 #define SERIAL1_RX_IF IFS0bits.U1RXIF
 #define SERIAL1_TX_IF IFS0bits.U1TXIF
@@ -47,7 +48,7 @@
 #define SERIAL4_RX_IP IPC22bits.U4RXIP
 #define SERIAL4_TX_IP IPC22bits.U4TXIP
 
-/* Macro to check an SERIAL if enabled or not in the confogurations (drv_conf)
+/* Macro to check an SERIAL if enabled or not in the configurations (drv_conf)
  * x: modul ID
  * Usage: #if SERIAL_MODULE_EN(2) ... #endif */
 #define SERIAL_MODULE_EN(x) (SERIAL ## x ##_BUF_SIZE != 0 && SERIAL ## x ##_PRIO != HW_INT_PRIO_OFF)
@@ -187,7 +188,7 @@ hw_res_t psp_serial_wr(serial_t id, uint8_t tx)
         psp_serial_tx_int_en(id, 0); 
         fifo_ret = fifo_push(&m_dsc[id].tx_fifo, &tx); 
         /* If data is added to the fifo start sending*/
-        if(fifo_ret != false) {
+        if(fifo_ret != false && m_dsc[id].UxSTA->TRMT != 0) {
             psp_serial_send_next(id);
         }
         
@@ -199,7 +200,7 @@ hw_res_t psp_serial_wr(serial_t id, uint8_t tx)
             /*Show different error if the CPU priority is higher 
              * then the TX interrupt priority. 
              * In this case the sending is not possible*/
-            if(SRbits.IPL > SERIAL1_PRIO) res = HW_RES_NOT_RDY;
+          //  if(SRbits.IPL > SERIAL1_PRIO) res = HW_RES_NOT_RDY;
         }
     } else {
         res = HW_RES_DIS;
@@ -442,6 +443,8 @@ static void psp_serial_init_module(void)
 
             m_dsc[id].UxMODE->UEN = 0b00; /*00 = SERIAL: UxTX, UxRX, I/O: UxCTS, UxRTS */
             m_dsc[id].UxMODE->UARTEN = 1;    /*SERIALx is enable*/
+            m_dsc[id].UxSTA->UTXISEL0 = 1;
+            m_dsc[id].UxSTA->UTXISEL1 = 0;
             m_dsc[id].UxSTA->UTXEN = 1;   /*SERIALx TX int. enable*/
             m_dsc[id].UxSTA->URXEN = 1;   /*SERIALx RX int. enable*/
         }
@@ -455,8 +458,6 @@ static void psp_serial_init_module(void)
  */
 static void psp_serial_send_next(serial_t id)
 {
-    /*Check the UART buffer is not full*/
-    if(m_dsc[id].UxSTA->UTXBF != 0) return;
     
     //pop the data from the buffer and send it
     uint8_t tx_byte;

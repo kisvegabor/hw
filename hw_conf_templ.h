@@ -92,7 +92,7 @@
 /*-----------------
  * SERIAL (UART)
  *----------------*/
-#define USE_SRIAL        0
+#define USE_SERIAL        0
 #if USE_SERIAL != 0
 
 /*SERIAL1*/
@@ -464,5 +464,7 @@
 #if USE_SDCARD !=0
 #define SDCARD_SPI_DRV     SPIX_CSX
 #endif
+
+#endif /* Remove this line to enable the content */
 
 #endif

@@ -78,7 +78,7 @@ static m_dsc_t m_dsc[] =
         {NULL,                       NULL,          NULL,       0,          NULL},
 #endif
 #if TMR4_EN != 0
-        {(T1CONBITS*)&T4CONbits,     &TME4,         &PR4,       0,          NULL},
+        {(T1CONBITS*)&T4CONbits,     &TMR4,         &PR4,       0,          NULL},
 #else
         {NULL,                       NULL,          NULL,       0,          NULL},
 #endif
@@ -147,7 +147,7 @@ hw_res_t psp_tmr_set_period(tmr_t tmr, uint32_t p_us)
             *m_dsc[tmr].PRx = new_pr;
             m_dsc[tmr].TxCON->TCKPS = i-1;
 
-            /*Set the cloxk source*/
+            /*Set the clock source*/
             m_dsc[tmr].TxCON->TCS = 0;
         }
     }
@@ -232,7 +232,7 @@ void psp_tmr_en_int(tmr_t tmr, bool en)
 #endif
 
 #if TMR5_EN != 0
-        case TIMER:
+        case HW_TMR5:
             TIMER5_IE = en_value;
             TIMER5_IP = TMR5_PRIO;
             break;
