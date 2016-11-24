@@ -21,6 +21,7 @@
 #include "dev/dispc/SSD1963.h"
 #include "dev/dispc/R61581.h"
 #include "dev/dispc/ST7565.h"
+#include "dev/dispc/rdisp.h"
 #include "dev/tp/XPT2046.h"
 #include "dev/tp/FT5406EE8.h"
 #include "dev/tp/mouse.h"
@@ -117,6 +118,9 @@ void dev_init(void)
     st7565_init();
 #endif
     
+#if USE_RDISP != 0
+    rdisp_init();
+#endif
 #if USE_XPT2046 != 0
     xpt2046_init();
 #endif

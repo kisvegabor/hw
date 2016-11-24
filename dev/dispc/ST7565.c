@@ -186,7 +186,7 @@ void st7565_fill(color_t color)
             if (white != 0) {
                 lcd_fb[x+ (y/8)*ST7565_HOR_RES] |= (1 << (7-(y%8)));
             } else {
-                lcd_fb[x+ (y/8)*ST7565_VER_RES] &= ~( 1 << (7-(y%8)));
+                lcd_fb[x+ (y/8)*ST7565_HOR_RES] &= ~( 1 << (7-(y%8)));
             }
         }
     }

@@ -96,24 +96,24 @@
 #if USE_SERIAL != 0
 
 /*SERIAL1*/
-#define SER1_PRIO       HW_INT_PRIO_OFF /*HW_INT_PRIO_OFF to disable module*/
-#define SER1_BUF_SIZE   0				 /*0: disable module*/
-#define SER1_MODE       (SER_MODE_BASIC)
+#define SERIAL1_PRIO       HW_INT_PRIO_OFF /*HW_INT_PRIO_OFF to disable module*/
+#define SERIAL1_BUF_SIZE   0				 /*0: disable module*/
+#define SERIAL1_MODE       (SERIAL_MODE_BASIC)
 
 /*SERAL2*/
-#define SER2_PRIO       HW_INT_PRIO_OFF /*HW_INT_PRIO_OFF to disable module*/
-#define SER2_BUF_SIZE   0
-#define SER2_MODE       (SERIAL_MODE_BASIC)
+#define SERIAL2_PRIO       HW_INT_PRIO_OFF /*HW_INT_PRIO_OFF to disable module*/
+#define SERIAL2_BUF_SIZE   0
+#define SERIAL2_MODE       (SERIAL_MODE_BASIC)
 
 /*SERIAL3*/
-#define SER3_PRIO       HW_INT_PRIO_OFF /*HW_INT_PRIO_OFF to disable module*/
-#define SER3_BUF_SIZE   0
-#define SER3_MODE       (SERIAL_MODE_BASIC)
+#define SERIAL3_PRIO       HW_INT_PRIO_OFF /*HW_INT_PRIO_OFF to disable module*/
+#define SERIAL3_BUF_SIZE   0
+#define SERIAL3_MODE       (SERIAL_MODE_BASIC)
 
 /*SERIAL4*/
-#define SER4_PRIO       HW_INT_PRIO_OFF /*HW_INT_PRIO_OFF to disable*/
-#define SER4_BUF_SIZE   0
-#define SER4_MODE       (SERIAL_MODE_BASIC)
+#define SERIAL4_PRIO       HW_INT_PRIO_OFF /*HW_INT_PRIO_OFF to disable*/
+#define SERIAL4_BUF_SIZE   0
+#define SERIAL4_MODE       (SERIAL_MODE_BASIC)
 #endif /*USE_SERIAL*/
 
 
@@ -387,6 +387,10 @@
 #define USE_R61581   0
 #if USE_R61581 != 0
 #define R61581_PAR_CS    PAR_CSX
+#define R61581_RS_PORT   IO_PORTX
+#define R61581_RS_PIN    IO_PINX
+#define R61581_RST_PORT  IO_PORTX
+#define R61581_RST_PIN   IO_PINX
 #define R61581_RST_PORT  IO_PORTX
 #define R61581_RST_PIN   IO_PINX
 #define R61581_BL_PORT   IO_PORTX
@@ -431,9 +435,17 @@
  *--------------*/
 #define USE_XPT2046     0
 #if USE_XPT2046 != 0
-#define XPT2046_SPI_DRV     SPISW_CSX
+#define XPT2046_SPI_DRV     HW_SPIX_CSX
 #define XPT2046_IRQ_PORT    IO_PORTX
 #define XPT2046_IRQ_PIN     IO_PINX
+#define XPT2046_HOR_RES 480
+#define XPT2046_VER_RES 320
+#define XPT2046_X_MIN   0
+#define XPT2046_Y_MIN   0 
+#define XPT2046_X_MAX   4096
+#define XPT2046_Y_MAX   4096
+#define XPT2046_AVG     4 
+#define XPT2046_INV     1 
 #endif
 
 /*-----------------
@@ -462,7 +474,7 @@
  *------------*/
 #define USE_SDCARD     0
 #if USE_SDCARD !=0
-#define SDCARD_SPI_DRV     SPIX_CSX
+#define SDCARD_SPI_DRV     HW_SPIX_CSX
 #endif
 
 #endif /* Remove this line to enable the content */
