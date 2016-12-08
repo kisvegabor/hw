@@ -131,7 +131,7 @@ void tick_wait_us (uint32_t delay)
  * @param fp pointer to a void func(void) function
  * @return false: too much callback. Increase TICK_FUNC_NUM in misc_conf.h
  */
-bool tick_add_func(void(*fp)(void))
+bool tick_add_cb(void(*fp)(void))
 {    
     bool suc = false;
     
@@ -155,7 +155,7 @@ bool tick_add_func(void(*fp)(void))
  * Remove a previously added function from the systick call backs
  * @param fp pointer to sys tick callback function
  */
-void tick_rem_func(void(*fp)(void))
+void tick_rem_cb(void(*fp)(void))
 {
     tmr_en_int(TICK_TIMER, false);  /*Disable interrupt while reading*/
     

@@ -108,7 +108,7 @@ void sdcard_init(void)
     DSTATUS d_res;
     FRESULT f_res = 0xFF;
     
-    tick_add_func(disk_timerproc);
+    tick_add_cb(disk_timerproc);
     
     
     d_res=disk_initialize(0);
