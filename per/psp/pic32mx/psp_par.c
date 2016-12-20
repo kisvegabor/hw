@@ -43,13 +43,9 @@ void psp_par_init(void)
     
 }
 
-hw_res_t psp_par_set_wait_time(uint8_t wait)
+void psp_par_set_wait_time(uint8_t wait)
 {
-    hw_res_t res = HW_RES_OK;
-    
-    act_wait = wait;  
-    
-    return res;
+    act_wait = wait;
 }
 
 

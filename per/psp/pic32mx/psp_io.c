@@ -111,17 +111,14 @@ void psp_io_init(void)
  * @param value
  * @return 
  */
-hw_res_t psp_io_rd_port(io_port_t port, volatile unsigned int * value)
-{
-    hw_res_t res = HW_RES_OK;
-    
+unsigned int psp_io_rd_port(io_port_t port)
+{ 
+    unsigned int tmp = 0;
     if(reg_map[port].PORTx != NULL) {
-        (*value) =  *reg_map[port].PORTx;
-    } else {
-        res = HW_RES_NOT_EX;
-    }
+        tmp =  *reg_map[port].PORTx;
+    } 
     
-    return res;
+    return tmp;
 }
 
 /**
@@ -130,17 +127,11 @@ hw_res_t psp_io_rd_port(io_port_t port, volatile unsigned int * value)
  * @param value
  * @return 
  */
-hw_res_t psp_io_wr_port(io_port_t port, volatile unsigned int value)
-{
-    hw_res_t res = HW_RES_OK;
-    
+void psp_io_wr_port(io_port_t port, volatile unsigned int value)
+{   
     if(reg_map[port].LATx != NULL) {
         (*reg_map[port].LATx) = value;
-    } else {
-        res = HW_RES_NOT_EX;
-    }
-
-    return res;
+    } 
 }
 
 /**
@@ -149,22 +140,18 @@ hw_res_t psp_io_wr_port(io_port_t port, volatile unsigned int value)
  * @param value
  * @return 
  */
-hw_res_t psp_io_rd_dir(io_port_t port, volatile unsigned int * value)
+volatile unsigned int psp_io_rd_dir(io_port_t port)
 {
-    hw_res_t res = HW_RES_OK;
-    
+ 
+    unsigned int tmp = 0;
     if(reg_map[port].TRISx != NULL) {
-        (*value) =  *reg_map[port].TRISx;
-    } else {
-        res = HW_RES_NOT_EX;
-    }
+        tmp =  *reg_map[port].TRISx;
+    } 
     
     /*Invert the value if it is necessary*/
-    if (IO_DIR_OUT != 0) {
-        *value = ~(*value);
-    }
+    if (IO_DIR_OUT != 0)tmp = ~tmp;
     
-    return res;
+    return tmp;
 }
 
 /**
@@ -173,10 +160,8 @@ hw_res_t psp_io_rd_dir(io_port_t port, volatile unsigned int * value)
  * @param value
  * @return 
  */
-hw_res_t psp_io_wr_dir(io_port_t port, volatile unsigned int value)
+void psp_io_wr_dir(io_port_t port, volatile unsigned int value)
 {
-    hw_res_t res = HW_RES_OK;
-    
     /*Invert the value if it is necessary*/
     if (IO_DIR_OUT != 0) {
         value = ~value;
@@ -185,11 +170,6 @@ hw_res_t psp_io_wr_dir(io_port_t port, volatile unsigned int value)
     if(reg_map[port].TRISx != NULL) {
         (*reg_map[port].TRISx) = value;
     } 
-    else {
-        res = HW_RES_NOT_EX;
-    }
-
-    return res;
 }
 
 

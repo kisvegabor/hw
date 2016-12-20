@@ -166,36 +166,27 @@ hw_res_t psp_tmr_set_period(tmr_t tmr, uint32_t p_us)
     return res;
 }
 
-hw_res_t psp_tmr_set_value(tmr_t tmr, uint32_t value)
+void psp_tmr_set_value(tmr_t tmr, uint32_t value)
 {
     hw_res_t res = psp_tmr_id_test(tmr);
     
     if(res == HW_RES_OK) {
-        if(reg_map[tmr].TMRx != NULL) {
-            *reg_map[tmr].TMRx = value;
-        }
-        else {
-            res = HW_RES_NOT_EX;
-        }
+        *reg_map[tmr].TMRx = value;
     }
     
-    return res;
 }
 
-hw_res_t psp_tmr_set_cb(tmr_t tmr, void (*cb) (void))
+void psp_tmr_set_cb(tmr_t tmr, void (*cb) (void))
 {
     hw_res_t res = psp_tmr_id_test(tmr);
     
     if(res == HW_RES_OK) {
         m_dsc[tmr].cb = cb;
     }
-    
-    return res;
 }
 
-hw_res_t psp_tmr_en_int(tmr_t tmr, bool en)
+void psp_tmr_en_int(tmr_t tmr, bool en)
 {
-    hw_res_t res = HW_RES_OK;
     uint8_t en_value = (en == false ?  0 : 1);
             
     switch(tmr)
@@ -242,22 +233,17 @@ hw_res_t psp_tmr_en_int(tmr_t tmr, bool en)
             break;
 #endif
         default:
-            res = HW_RES_NOT_EX;
             break;
 
     }
-    
-    return res;
 }
 
-hw_res_t psp_tmr_run(tmr_t tmr, bool en)
+void psp_tmr_run(tmr_t tmr, bool en)
 {
     hw_res_t res = psp_tmr_id_test(tmr);
     if(res == HW_RES_OK) {
         reg_map[tmr].TxCON->ON = (en == false ? 0 : 1);
     }
-    
-    return res;
 }
 
 /**

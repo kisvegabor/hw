@@ -71,7 +71,7 @@ void psp_spi_init(void)
     }
 }
 
-hw_res_t psp_spi_set_baud(spi_hw_t spi, uint32_t baud)
+void psp_spi_set_baud(spi_hw_t spi, uint32_t baud)
 {
     if(baud == SPI_BAUD_MAX) {
         baud = CLOCK_PERIPH / 2;
@@ -81,16 +81,14 @@ hw_res_t psp_spi_set_baud(spi_hw_t spi, uint32_t baud)
     
     brg = (uint32_t) CLOCK_PERIPH / ((uint32_t) 2UL * baud);
     
-    if(brg == 0) return HW_RES_INV_PARAM;
-    
-    brg --;
+    if(brg == 0) brg = 1;
+    else brg --;
     
     *(m_dsc[spi].SPIxBRG) = brg;
     
-    return HW_RES_OK;
 }
 
-hw_res_t psp_spi_xchg(spi_hw_t spi, const void * tx_a, void * rx_a, uint32_t length)
+void psp_spi_xchg(spi_hw_t spi, const void * tx_a, void * rx_a, uint32_t length)
 {   
     const uint8_t * tx8_a = tx_a;
     uint8_t * rx8_a = rx_a;
@@ -107,8 +105,6 @@ hw_res_t psp_spi_xchg(spi_hw_t spi, const void * tx_a, void * rx_a, uint32_t len
         
         if(rx8_a != NULL) rx8_a[i] = rec;
     }
-    
-	return HW_RES_OK;
 }
 
 /**********************
