@@ -226,8 +226,6 @@
 #define PARSW_WR_PIN      IO_PINX
 #define PARSW_RD_PORT     IO_PORTX
 #define PARSW_RD_PIN      IO_PINX
-#define PARSW_RS_PORT     IO_PORTX
-#define PARSW_RS_PIN      IO_PINX
 //#define PARSW_WR_DATA(data) {}  /*Parallel wr data*/
 //#define PARSW_RD_DATA(data) {}  /*Parallel rd data*/
 //#define PARSW_WR_STROBE {}  /*Parallel wr strobe*/
@@ -244,7 +242,7 @@
 #define TFT_HOR_RES   480
 #define TFT_HSL       30     /*HSYNC length*/
 #define TFT_HBP       38     /*Hor. Back proach*/
-#define TFT_HFP       12     /*Hor Front proach*/
+#define TFT_HFP       12     /*Hor. Front proach*/
 
 #define TFT_VER_RES  320            
 #define TFT_VSL      3       /*VSYNC length*/
@@ -291,31 +289,6 @@
 #define LED8_PORT       IO_PORTX
 #define LED8_PIN        IO_PINX
 #endif /*USE_LED*/
-
-
-/*----------
- *  Switch
- *---------*/
-#define USE_SW         0
-#if USE_SW != 0
-#define SW1_PORT       IO_PORTX
-#define SW1_PIN        IO_PINX
-#define SW2_PORT       IO_PORTX
-#define SW2_PIN        IO_PINX
-#define SW3_PORT       IO_PORTX
-#define SW3_PIN        IO_PINX
-#define SW4_PORT       IO_PORTX
-#define SW4_PIN        IO_PINX
-#define SW5_PORT       IO_PORTX
-#define SW5_PIN        IO_PINX
-#define SW6_PORT       IO_PORTX
-#define SW6_PIN        IO_PINX
-#define SW7_PORT       IO_PORTX
-#define SW7_PIN        IO_PINX
-#define SW8_PORT       IO_PORTX
-#define SW8_PIN        IO_PINX
-#endif
-
 
 /*------------- 
  *   Buzzer
