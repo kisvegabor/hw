@@ -11,6 +11,7 @@
 
 #include "../../spi.h"
 #include <xc.h>
+#include <stddef.h>
 
 /*********************
  *      DEFINES
@@ -36,12 +37,39 @@ typedef struct
 /**********************
  *  STATIC VARIABLES
  **********************/
+
 static m_dsc_t m_dsc[] = 
-{
 /*SPIxCON                               SPIxSTAT                                   SPIxBRG,    SPIxBUF */
-{(volatile __SPI2CONbits_t *) &SPI1ACON, (volatile __SPI2STATbits_t *) &SPI1ASTAT, &SPI1ABRG, &SPI1ABUF},
-{(volatile __SPI2CONbits_t *) &SPI2CON,  (volatile __SPI2STATbits_t *) &SPI2STAT, &SPI2BRG,   &SPI2BUF},
-{(volatile __SPI2CONbits_t *) &SPI3CON,  (volatile __SPI2STATbits_t *) &SPI3STAT, &SPI3BRG,   &SPI3BUF},
+{
+#if defined(_SPI1A) && SPI1_EN != 0 
+    {(volatile __SPI2CONbits_t *) &SPI1ACON, (volatile __SPI2STATbits_t *) &SPI1ASTAT, &SPI1ABRG, &SPI1ABUF},
+#else
+    {NULL,                                  NULL,                                      NULL,       NULL},
+#endif
+    
+#if defined(_SPI2)  && SPI2_EN != 0
+    {(volatile __SPI2CONbits_t *) &SPI2CON,  (volatile __SPI2STATbits_t *) &SPI2STAT, &SPI2BRG,   &SPI2BUF},
+#else
+    {NULL,                                  NULL,                                      NULL,       NULL},
+#endif
+    
+#if defined(_SPI3) &&  SPI3_EN != 0
+    {(volatile __SPI2CONbits_t *) &SPI3CON,  (volatile __SPI2STATbits_t *) &SPI3STAT, &SPI3BRG,   &SPI3BUF},
+#else
+    {NULL,                                  NULL,                                      NULL,       NULL},
+#endif
+    
+#if defined(_SPI4) && SPI4_EN != 0
+    {(volatile __SPI2CONbits_t *) &SPI4CON,  (volatile __SPI2STATbits_t *) &SPI4STAT, &SPI4BRG,   &SPI4BUF},
+#else
+    {NULL,                                  NULL,                                      NULL,       NULL},
+#endif
+    
+#if defined(_SPI5)  && SPI5_EN != 0
+    {(volatile __SPI2CONbits_t *) &SPI5CON,  (volatile __SPI2STATbits_t *) &SPI5STAT, &SPI5BRG,   &SPI5BUF},
+#else
+    {NULL,                                  NULL,                                      NULL,       NULL},
+#endif
 };
 
 /**********************
