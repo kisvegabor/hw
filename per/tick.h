@@ -31,12 +31,20 @@ void tick_wait_ms (uint32_t delay);
 void tick_wait_us (uint32_t delay);
 uint32_t tick_get(void);
 uint32_t tick_elaps(uint32_t time_prev);
-bool tick_add_cb(void(*fp)(void));
-void tick_rem_cb(void(*cb)(void));
+bool tick_add_func(void(*fp)(void));
+void tick_rem_func(void(*cb)(void));
 
 /**********************
  *      MACROS
  **********************/
+
+#else 
+#if TICK_BLOCK_WAIT != 0
+#include <stdint.h>
+void tick_wait_ms (uint32_t delay);
+void tick_wait_us (uint32_t delay);
+#endif
+
 
 #endif
 

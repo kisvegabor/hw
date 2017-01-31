@@ -131,7 +131,7 @@ void tick_wait_us (uint32_t delay)
  * @param fp pointer to a void func(void) function
  * @return false: too much callback. Increase TICK_FUNC_NUM in misc_conf.h
  */
-bool tick_add_cb(void(*fp)(void))
+bool tick_add_func(void(*fp)(void))
 {    
     bool suc = false;
     
@@ -155,7 +155,7 @@ bool tick_add_cb(void(*fp)(void))
  * Remove a previously added function from the systick call backs
  * @param fp pointer to sys tick callback function
  */
-void tick_rem_cb(void(*fp)(void))
+void tick_rem_func(void(*fp)(void))
 {
     tmr_en_int(TICK_TIMER, false);  /*Disable interrupt while reading*/
     
@@ -191,6 +191,37 @@ static void sys_time_inc(void)
     }
 #endif
 }
+
+#else
+#if TICK_BLOCK_WAIT != 0
+#include "tick.h"
+
+/**
+ * Wait a given number of milliseconds (blocking)
+ * @param delay the desired delay in milliseconds
+ */
+void tick_wait_ms (uint32_t delay)
+{
+    uint32_t i;
+    for(i = 0; i < delay; i++) {
+        tick_wait_us(1000);
+    }
+}
+
+/**
+ * Wait a given number of microseconds. 
+ * Has to be adjusted with TICK_US_BASE in misc_conf.h
+ * @param delay the desired delay in milliseconds
+ */
+void tick_wait_us (uint32_t delay)
+{
+    volatile uint32_t i,j,k = 0;
+
+    for(i=0;i<delay;i++) {
+        for(j=0;j < TICK_US_BASE; j++) k++;
+    }
+}
+#endif
 
 #endif
 
