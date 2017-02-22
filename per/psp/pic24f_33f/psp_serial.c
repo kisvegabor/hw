@@ -18,7 +18,9 @@
 /***********************
  *       DEFINES
  ***********************/
+#ifndef SERIAL_DEF_BAUD
 #define SERIAL_DEF_BAUD 9600
+#endif
 
 #define SERIAL1_RX_IF IFS0bits.U1RXIF
 #define SERIAL1_TX_IF IFS0bits.U1TXIF
