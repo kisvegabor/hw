@@ -100,7 +100,7 @@ void tick_wait_ms (uint32_t delay)
     if(started == false) {
         uint32_t i;
         for(i = 0; i < delay; i++) {
-            tick_wait_us(1000);
+            tick_wait_us(1000); 
         }
     } else {
         uint32_t act_time = tick_get();

@@ -114,7 +114,14 @@ static bool psp_tmr_id_test(tmr_t id);
  */
 void psp_tmr_init(void)
 {
-    /*Nothing to do*/
+    tmr_t t;
+    
+    for(t = HW_TMR1; t < HW_TMR_NUM; t++) {
+        if(psp_tmr_id_test(t) == false) continue;
+            *((unsigned int *)m_dsc[t].TxCON) = 0;
+            *((unsigned int *)m_dsc[t].TMRx) = 0;
+            *((unsigned int *)m_dsc[t].PRx) = 0xFFFF;
+    }   
 }
 
 /**
