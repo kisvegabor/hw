@@ -116,6 +116,13 @@ bool xpt2046_get(int16_t * x, int16_t * y)
  **********************/
 static void xpt2046_corr(int16_t * x, int16_t * y)
 {
+#if XPT2046_XY_SWAP != 0
+    int16_t swap_tmp;
+    swap_tmp = *x;
+    *x = *y;
+    *y = swap_tmp;
+#endif
+    
     if((*x) > XPT2046_X_MIN) (*x) -= XPT2046_X_MIN;
     else (*x) = 0;
     
@@ -128,10 +135,14 @@ static void xpt2046_corr(int16_t * x, int16_t * y)
     (*y) = (uint32_t) ((uint32_t)(*y) * XPT2046_VER_RES) /
                              (XPT2046_Y_MAX - XPT2046_Y_MIN);
     
-#if XPT2046_INV != 0
+#if XPT2046_X_INV != 0
     (*x) =  XPT2046_HOR_RES - (*x);
+#endif
+    
+#if XPT2046_Y_INV != 0
     (*y) =  XPT2046_VER_RES - (*y);
 #endif
+    
 
 }
 

@@ -414,14 +414,14 @@
 #define XPT2046_SPI_DRV     HW_SPIX_CSX
 #define XPT2046_IRQ_PORT    IO_PORTX
 #define XPT2046_IRQ_PIN     IO_PINX
-#define XPT2046_HOR_RES 480
-#define XPT2046_VER_RES 320
-#define XPT2046_X_MIN   0
-#define XPT2046_Y_MIN   0 
-#define XPT2046_X_MAX   4096
-#define XPT2046_Y_MAX   4096
-#define XPT2046_AVG     4 
-#define XPT2046_INV     1 
+#define XPT2046_HOR_RES     480
+#define XPT2046_VER_RES     320
+#define XPT2046_X_MIN       200
+#define XPT2046_Y_MIN       200 
+#define XPT2046_X_MAX       3800
+#define XPT2046_Y_MAX       3800
+#define XPT2046_AVG         4 
+#define XPT2046_INV         0 
 #endif
 
 /*-----------------
