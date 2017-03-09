@@ -51,9 +51,9 @@ void psp_par_init(void)
     PMCONbits.PTRDEN = 1;
     
     PMMODEbits.MODE16 = 1;
-    PMMODEbits.WAITB = 0b1;
-    PMMODEbits.WAITM = 0b1;
-    PMMODEbits.WAITE = 0b1;
+    PMMODEbits.WAITB = PAR_WAITB - 1;
+    PMMODEbits.WAITM = PAR_WAITM - 1;
+    PMMODEbits.WAITE = PAR_WAITE - 1;
     
     PMCONbits.ON = 1;
 }

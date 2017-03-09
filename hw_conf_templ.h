@@ -222,7 +222,11 @@
 #define PAR_CS2_PORT     IO_PORTX
 #define PAR_CS2_PIN      IO_PINX
 #define PAR_SW           0
-#if PAR_SW != 0        
+#if PAR_SW == 0     /*Hw par. settings*/
+#define PAR_WAITB        1      /*Begin wait cycles (>=1)*/
+#define PAR_WAITM        1      /*Middle wait cycles (>=1)*/
+#define PAR_WAITE        1      /*End wait cycles (>=1)*/
+#else               /*Sw par. settings*/
 #define PARSW_DATA_PORT   IO_PORTX
 #define PARSW_ADR_PORT    IO_PORTX
 #define PARSW_WR_PORT     IO_PORTX
