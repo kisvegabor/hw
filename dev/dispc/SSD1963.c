@@ -13,6 +13,7 @@
 #include "SSD1963.h"
 #include "hw/per/par.h"
 #include "hw/per/io.h"
+#include "hw/per/tick.h"
 #include "misc/others/color.h"
 
 /*********************
@@ -215,7 +216,7 @@ static void ssd1963_set_clk(void)
     /* Set PLL*/    
     ssd1963_cmd(0xe2);          
     ssd1963_data(0x23);
-    ssd1963_data(0x02);
+    ssd1963_data(0x05);
     ssd1963_data(0x54);
 
     /*Enable PLL*/
