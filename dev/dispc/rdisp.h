@@ -12,7 +12,7 @@
 #include "hw_conf.h"
 #if USE_RDISP != 0
 #include <stdint.h>
-#include "misc/others/color.h"
+#include "misc/gfx/color.h"
 
 /*********************
  *      DEFINES

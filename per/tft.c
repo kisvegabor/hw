@@ -48,33 +48,21 @@ hw_res_t tft_init(void)
 }
 
 /**
- * Mark out an area on the TFT
- * @param x1 left coordinate
- * @param y1 top coordinate
- * @param x2 right coordinate
- * @param y2 bottom coordinate
- */
-void tft_set_area(int32_t x1, int32_t y1, int32_t x2, int32_t y2)
-{
-	psp_tft_set_area(x1, y1, x2, y2);
-}
-
-/**
  * Fill out the marked area with a color
  * @param color fill color
  */
-void tft_fill(color_t color)
+void tft_fill(int32_t x1, int32_t y1, int32_t x2, int32_t y2, color_t color)
 {
-	psp_tft_fill(color);
+	psp_tft_fill(x1, y1, x2, y2, color);
 }
 
 /** 
  * Put a color map to the marked area
  * @param color_p an array of colors
  */
-void tft_map(color_t * color_p)
+void tft_map(int32_t x1, int32_t y1, int32_t x2, int32_t y2, const  color_t * color_p)
 {
-	psp_tft_map(color_p);
+	psp_tft_map(x1, y1, x2, y2, color_p);
 }
 
 

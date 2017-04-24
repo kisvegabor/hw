@@ -14,7 +14,7 @@
 
 #include <stdint.h>
 #include "hw/hw.h"
-#include "misc/others/color.h"
+#include "misc/gfx/color.h"
 
 /*********************
  *      DEFINES
@@ -28,9 +28,8 @@
  * GLOBAL PROTOTYPES
  **********************/
 void ssd1963_init(void);
-void ssd1963_set_area(int32_t x1, int32_t y1, int32_t x2, int32_t y2);
-void ssd1963_fill(color_t  color);
-void ssd1963_map(color_t * color_p);
+void ssd1963_fill(int32_t x1, int32_t y1, int32_t x2, int32_t y2, color_t  color);
+void ssd1963_map(int32_t x1, int32_t y1, int32_t x2, int32_t y2, color_t * color_p);
 
 /**********************
  *      MACROS

@@ -43,10 +43,6 @@ static SDL_Window * window;
 static SDL_Renderer * renderer;
 static SDL_Texture * texture;
 static uint32_t tft_fb[TFT_HOR_RES * TFT_VER_RES];
-static int32_t last_x1;
-static int32_t last_y1;
-static int32_t last_x2;
-static int32_t last_y2;
 static bool sdl_inited = false;
 static bool sdl_refr_qry = false;
 static bool sdl_quit_qry = false;
@@ -76,38 +72,24 @@ hw_res_t psp_tft_init(void)
     return res;
 }
 
-/**
- * Mark out an area on the TFT
- * @param x1 left coordinate
- * @param y1 top coordinate
- * @param x2 right coordinate
- * @param y2 bottom coordinate
- */
-void psp_tft_set_area(int32_t x1, int32_t y1, int32_t x2, int32_t y2)
-{
-	last_x1 = x1;
-	last_y1 = y1;
-	last_x2 = x2;
-	last_y2 = y2;
-}
 
 /**
  * Fill out the marked area with a color
  * @param color fill color
  */
-void psp_tft_fill(color_t color)
+void psp_tft_fill(int32_t x1, int32_t y1, int32_t x2, int32_t y2, color_t color)
 {
     /*Return if the area is out the screen*/
-    if(last_x2 < 0) return;
-    if(last_y2 < 0) return;
-    if(last_x1 > TFT_HOR_RES - 1) return;
-    if(last_y1 > TFT_VER_RES - 1) return;
+    if(x2 < 0) return;
+    if(y2 < 0) return;
+    if(x1 > TFT_HOR_RES - 1) return;
+    if(y1 > TFT_VER_RES - 1) return;
 
     /*Truncate the area to the screen*/
-    int32_t act_x1 = last_x1 < 0 ? 0 : last_x1;
-    int32_t act_y1 = last_y1 < 0 ? 0 : last_y1;
-    int32_t act_x2 = last_x2 > TFT_HOR_RES - 1 ? TFT_HOR_RES - 1 : last_x2;
-    int32_t act_y2 = last_y2 > TFT_VER_RES - 1 ? TFT_VER_RES - 1 : last_y2;
+    int32_t act_x1 = x1 < 0 ? 0 : x1;
+    int32_t act_y1 = y1 < 0 ? 0 : y1;
+    int32_t act_x2 = x2 > TFT_HOR_RES - 1 ? TFT_HOR_RES - 1 : x2;
+    int32_t act_y2 = y2 > TFT_VER_RES - 1 ? TFT_VER_RES - 1 : y2;
 
 	uint32_t x;
 	uint32_t y;
@@ -126,19 +108,19 @@ void psp_tft_fill(color_t color)
  * Put a color map to the marked area
  * @param color_p an array of colors
  */
-void psp_tft_map(color_t * color_p)
+void psp_tft_map(int32_t x1, int32_t y1, int32_t x2, int32_t y2, const color_t * color_p)
 {
    /*Return if the area is out the screen*/
-	if(last_x2 < 0) return;
-	if(last_y2 < 0) return;
-	if(last_x1 > TFT_HOR_RES - 1) return;
-	if(last_y1 > TFT_VER_RES - 1) return;
+	if(x2 < 0) return;
+	if(y2 < 0) return;
+	if(x1 > TFT_HOR_RES - 1) return;
+	if(y1 > TFT_VER_RES - 1) return;
 
 	/*Truncate the area to the screen*/
-	int32_t act_x1 = last_x1 < 0 ? 0 : last_x1;
-	int32_t act_y1 = last_y1 < 0 ? 0 : last_y1;
-	int32_t act_x2 = last_x2 > TFT_HOR_RES - 1 ? TFT_HOR_RES - 1 : last_x2;
-	int32_t act_y2 = last_y2 > TFT_VER_RES - 1 ? TFT_VER_RES - 1 : last_y2;
+	int32_t act_x1 = x1 < 0 ? 0 : x1;
+	int32_t act_y1 = y1 < 0 ? 0 : y1;
+	int32_t act_x2 = x2 > TFT_HOR_RES - 1 ? TFT_HOR_RES - 1 : x2;
+	int32_t act_y2 = y2 > TFT_VER_RES - 1 ? TFT_VER_RES - 1 : y2;
 
 	uint32_t x;
 	uint32_t y;
@@ -149,7 +131,7 @@ void psp_tft_map(color_t * color_p)
 			color_p++;
 		}
 
-		color_p += last_x2 - act_x2;
+		color_p += x2 - act_x2;
 	}
 
 	sdl_refr_qry = true;

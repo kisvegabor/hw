@@ -84,12 +84,6 @@ static void st7565_data(uint8_t data);
  **********************/
 static uint8_t lcd_fb[ST7565_HOR_RES * ST7565_VER_RES / 8] = {0xAA, 0xAA};
 static uint8_t pagemap[] = { 7, 6, 5, 4, 3, 2, 1, 0 };
-static int32_t last_x1;
-static int32_t last_y1;
-static int32_t last_x2;
-static int32_t last_y2;
-
-
 
 /**********************
  *      MACROS
@@ -145,37 +139,22 @@ void st7565_init(void)
 }
 
 /**
- * Mark out a rectangle
- * @param x1 left coordinate of the rectangle
- * @param y1 top coordinate of the rectangle
- * @param x2 right coordinate of the rectangle
- * @param y2 bottom coordinate of the rectangle
- */
-void st7565_set_area(int32_t x1, int32_t y1, int32_t x2, int32_t y2)
-{
-	last_x1 = x1;
-	last_y1 = y1;
-	last_x2 = x2;
-	last_y2 = y2;
-}
-
-/**
  * Fill the previously marked area with a color
  * @param color fill color
  */
-void st7565_fill(color_t color) 
+void st7565_fill(int32_t x1, int32_t y1, int32_t x2, int32_t y2, color_t color)
 {
      /*Return if the area is out the screen*/
-    if(last_x2 < 0) return;
-    if(last_y2 < 0) return;
-    if(last_x1 > ST7565_HOR_RES - 1) return;
-    if(last_y1 > ST7565_VER_RES - 1) return;
+    if(x2 < 0) return;
+    if(y2 < 0) return;
+    if(x1 > ST7565_HOR_RES - 1) return;
+    if(y1 > ST7565_VER_RES - 1) return;
 
     /*Truncate the area to the screen*/
-    int32_t act_x1 = last_x1 < 0 ? 0 : last_x1;
-    int32_t act_y1 = last_y1 < 0 ? 0 : last_y1;
-    int32_t act_x2 = last_x2 > ST7565_HOR_RES - 1 ? ST7565_HOR_RES - 1 : last_x2;
-    int32_t act_y2 = last_y2 > ST7565_VER_RES - 1 ? ST7565_VER_RES - 1 : last_y2;
+    int32_t act_x1 = x1 < 0 ? 0 : x1;
+    int32_t act_y1 = y1 < 0 ? 0 : y1;
+    int32_t act_x2 = x2 > ST7565_HOR_RES - 1 ? ST7565_HOR_RES - 1 : x2;
+    int32_t act_y2 = y2 > ST7565_VER_RES - 1 ? ST7565_VER_RES - 1 : y2;
     
     int32_t x, y;
     uint8_t white = color_to1(color);
@@ -198,19 +177,19 @@ void st7565_fill(color_t color)
  * Put a pixel map to the previously marked area
  * @param color_p an array of pixels
  */
-void st7565_map(color_t * color_p) 
+void st7565_map(int32_t x1, int32_t y1, int32_t x2, int32_t y2, color_t * color_p)
 {
      /*Return if the area is out the screen*/
-    if(last_x2 < 0) return;
-    if(last_y2 < 0) return;
-    if(last_x1 > ST7565_HOR_RES - 1) return;
-    if(last_y1 > ST7565_VER_RES - 1) return;
+    if(x2 < 0) return;
+    if(y2 < 0) return;
+    if(x1 > ST7565_HOR_RES - 1) return;
+    if(y1 > ST7565_VER_RES - 1) return;
 
     /*Truncate the area to the screen*/
-    int32_t act_x1 = last_x1 < 0 ? 0 : last_x1;
-    int32_t act_y1 = last_y1 < 0 ? 0 : last_y1;
-    int32_t act_x2 = last_x2 > ST7565_HOR_RES - 1 ? ST7565_HOR_RES - 1 : last_x2;
-    int32_t act_y2 = last_y2 > ST7565_VER_RES - 1 ? ST7565_VER_RES - 1 : last_y2;
+    int32_t act_x1 = x1 < 0 ? 0 : x1;
+    int32_t act_y1 = y1 < 0 ? 0 : y1;
+    int32_t act_x2 = x2 > ST7565_HOR_RES - 1 ? ST7565_HOR_RES - 1 : x2;
+    int32_t act_y2 = y2 > ST7565_VER_RES - 1 ? ST7565_VER_RES - 1 : y2;
     
     int32_t x, y;
 
@@ -227,7 +206,7 @@ void st7565_map(color_t * color_p)
             color_p ++;
         }
         
-        color_p += last_x2 - act_x2; /*Next row*/
+        color_p += x2 - act_x2; /*Next row*/
     }
     
     st7565_flush(act_x1, act_y1, act_x2, act_y2);

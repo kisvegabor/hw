@@ -13,7 +13,7 @@
 #include "hw/per/par.h"
 #include "hw/per/io.h"
 #include "hw/per/tick.h"
-#include "misc/others/color.h"
+#include "misc/gfx/color.h"
 
 /*********************
  *      DEFINES
@@ -39,10 +39,6 @@ static inline void r61581_data(uint8_t data);
 /**********************
  *  STATIC VARIABLES
  **********************/
-static int32_t last_x1;
-static int32_t last_y1;
-static int32_t last_x2;
-static int32_t last_y2;
 static bool cmd_mode = true;
 
 /**********************
@@ -79,38 +75,24 @@ void r61581_init(void)
     
 }
 
-/**
- * Mark out a rectangle
- * @param x1 left coordinate of the rectangle
- * @param y1 top coordinate of the rectangle
- * @param x2 right coordinate of the rectangle
- * @param y2 bottom coordinate of the rectangle
- */
-void r61581_set_area(int32_t x1, int32_t y1, int32_t x2, int32_t y2)
-{   
-	last_x1 = x1;
-	last_y1 = y1;
-	last_x2 = x2;
-	last_y2 = y2;
-}
 
 /**
  * Fill the previously marked area with a color
  * @param color fill color
  */
-void r61581_fill(color_t color)
+void r61581_fill(int32_t x1, int32_t y1, int32_t x2, int32_t y2, color_t color)
 {
      /*Return if the area is out the screen*/
-    if(last_x2 < 0) return;
-    if(last_y2 < 0) return;
-    if(last_x1 > R61581_HOR_RES - 1) return;
-    if(last_y1 > R61581_VER_RES - 1) return;
+    if(x2 < 0) return;
+    if(y2 < 0) return;
+    if(x1 > R61581_HOR_RES - 1) return;
+    if(y1 > R61581_VER_RES - 1) return;
 
     /*Truncate the area to the screen*/
-    int32_t act_x1 = last_x1 < 0 ? 0 : last_x1;
-    int32_t act_y1 = last_y1 < 0 ? 0 : last_y1;
-    int32_t act_x2 = last_x2 > R61581_HOR_RES - 1 ? R61581_HOR_RES - 1 : last_x2;
-    int32_t act_y2 = last_y2 > R61581_VER_RES - 1 ? R61581_VER_RES - 1 : last_y2;
+    int32_t act_x1 = x1 < 0 ? 0 : x1;
+    int32_t act_y1 = y1 < 0 ? 0 : y1;
+    int32_t act_x2 = x2 > R61581_HOR_RES - 1 ? R61581_HOR_RES - 1 : x2;
+    int32_t act_y2 = y2 > R61581_VER_RES - 1 ? R61581_VER_RES - 1 : y2;
 
     //Set the rectangular area
     r61581_cmd(0x002A);
@@ -138,19 +120,19 @@ void r61581_fill(color_t color)
  * Put a pixel map to the previously marked area
  * @param color_p an array of pixels
  */
-void r61581_map(color_t * color_p)
+void r61581_map(int32_t x1, int32_t y1, int32_t x2, int32_t y2, color_t * color_p)
 {
      /*Return if the area is out the screen*/
-    if(last_x2 < 0) return;
-    if(last_y2 < 0) return;
-    if(last_x1 > R61581_HOR_RES - 1) return;
-    if(last_y1 > R61581_VER_RES - 1) return;
+    if(x2 < 0) return;
+    if(y2 < 0) return;
+    if(x1 > R61581_HOR_RES - 1) return;
+    if(y1 > R61581_VER_RES - 1) return;
 
     /*Truncate the area to the screen*/
-    int32_t act_x1 = last_x1 < 0 ? 0 : last_x1;
-    int32_t act_y1 = last_y1 < 0 ? 0 : last_y1;
-    int32_t act_x2 = last_x2 > R61581_HOR_RES - 1 ? R61581_HOR_RES - 1 : last_x2;
-    int32_t act_y2 = last_y2 > R61581_VER_RES - 1 ? R61581_VER_RES - 1 : last_y2;
+    int32_t act_x1 = x1 < 0 ? 0 : x1;
+    int32_t act_y1 = y1 < 0 ? 0 : y1;
+    int32_t act_x2 = x2 > R61581_HOR_RES - 1 ? R61581_HOR_RES - 1 : x2;
+    int32_t act_y2 = y2 > R61581_VER_RES - 1 ? R61581_VER_RES - 1 : y2;
 
         
     //Set the rectangular area
@@ -170,7 +152,7 @@ void r61581_map(color_t * color_p)
 
     int16_t i;
     uint16_t act_w = act_x2 - act_x1 + 1;
-    uint16_t last_w = last_x2 - last_x1 + 1;
+    uint16_t last_w = x2 - x1 + 1;
     
     r61581_data_mode();
     

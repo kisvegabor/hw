@@ -14,7 +14,7 @@
 #if USE_TFT != 0
 #include "hw/hw.h"
 #include <stdint.h>
-#include "misc/others/color.h"
+#include "misc/gfx/color.h"
 
 /*********************
  *      DEFINES
@@ -28,9 +28,8 @@
  * GLOBAL PROTOTYPES
  **********************/
 hw_res_t psp_tft_init(void);
-void psp_tft_set_area(int32_t x1, int32_t y1, int32_t x2, int32_t y2);
-void psp_tft_fill(color_t color);
-void psp_tft_map(color_t * color_p);
+void psp_tft_fill(int32_t x1, int32_t y1, int32_t x2, int32_t y2, color_t color);
+void psp_tft_map(int32_t x1, int32_t y1, int32_t x2, int32_t y2, const color_t * color_p);
 
 /**********************
  *      MACROS

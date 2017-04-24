@@ -14,7 +14,7 @@
 
 #include <stdint.h>
 #include "hw/hw.h"
-#include "misc/others/color.h"
+#include "misc/gfx/color.h"
 
 /*********************
  *      DEFINES
@@ -28,9 +28,8 @@
  * GLOBAL PROTOTYPES
  **********************/
 void r61581_init(void);
-void r61581_set_area(int32_t x1, int32_t y1, int32_t x2, int32_t y2);
-void r61581_fill(color_t color);
-void r61581_map(color_t * color_p);
+void r61581_fill(int32_t x1, int32_t y1, int32_t x2, int32_t y2, color_t color);
+void r61581_map(int32_t x1, int32_t y1, int32_t x2, int32_t y2, color_t * color_p);
 /**********************
  *      MACROS
  **********************/
