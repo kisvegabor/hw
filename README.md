@@ -24,7 +24,7 @@ Currently mainly PIC microcontrollers and PC are supported:
 * PC
 
 ## Usage
-1. Clone the repository into the root folder of your project: `https://github.com/littlevgl/hw.git`
+1. Clone the repository into the root folder of your project: `git clone https://github.com/littlevgl/hw.git`
 2. In your IDE add the project **root folder as include path**
 3. Copy *hw/hw_conf_templ.h* as **hw_conf.h** to the project root folder
 4. Delete the first `#if 0` and the last `#endif` to enable the file
