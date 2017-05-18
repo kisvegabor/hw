@@ -1,5 +1,8 @@
 # Periphery and device drivers
-The repository contains some drivers for microcontroller peripheries like:
+
+This Hardware Library is written mainly for the Littlev Graphics Library. If you would like to create GUI for an embedded system you should visit its [repository](https://github.com/littlevgl/lvgl) or [website](http://www.gl.littlev.hu).
+
+The repository contains some drivers for microcontroller (and PC) peripheries like:
 * GPIO
 * UART
 * SPI
