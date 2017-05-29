@@ -47,12 +47,26 @@
 #define SERIAL4_RX_IE IEC5bits.U4RXIE
 #define SERIAL4_TX_IE IEC5bits.U4TXIE
 #define SERIAL4_RX_IP IPC42bits.U4RXIP
-#define SERIAL4_TX_IP IPC42bits.U4TXIP
+#define SERIAL4_TX_IP IPC43bits.U4TXIP
+
+#define SERIAL5_RX_IF IFS5bits.U5RXIF
+#define SERIAL5_TX_IF IFS5bits.U5TXIF
+#define SERIAL5_RX_IE IEC5bits.U5RXIE
+#define SERIAL5_TX_IE IEC5bits.U5TXIE
+#define SERIAL5_RX_IP IPC45bits.U5RXIP
+#define SERIAL5_TX_IP IPC45bits.U5TXIP
+
+#define SERIAL6_RX_IF IFS5bits.U6RXIF
+#define SERIAL6_TX_IF IFS5bits.U6TXIF
+#define SERIAL6_RX_IE IEC5bits.U6RXIE
+#define SERIAL6_TX_IE IEC5bits.U6TXIE
+#define SERIAL6_RX_IP IPC47bits.U6RXIP
+#define SERIAL6_TX_IP IPC47bits.U6TXIP
 
 /* Macro to check an SERIAL if enabled or not in the configurations (drv_conf)
  * x: modul ID
  * Usage: #if SERIAL_MODULE_EN(2) ... #endif */
-#define SERIAL_MODULE_EN(x) (SERIAL ## x ##_BUF_SIZE != 0 && SERIAL ## x ##_PRIO != HW_INT_PRIO_OFF)
+#define SERIAL_MODULE_EN(x) (SER ## x ##_BUF_SIZE != 0 && SER ## x ##_PRIO != HW_INT_PRIO_OFF)
 
 #define IPL_NAME(prio) IPL_CONC(prio)
 #define IPL_CONC(prio) IPL ## prio ## AUTO
@@ -83,43 +97,62 @@ typedef struct
 
 /*Create fifos for every SERIAL module*/
 #if SERIAL_MODULE_EN(1)
-static uint8_t tbuf1[SERIAL1_BUF_SIZE];
-static uint8_t rbuf1[SERIAL1_BUF_SIZE];
+static uint8_t tbuf1[SER1_BUF_SIZE];
+static uint8_t rbuf1[SER1_BUF_SIZE];
 #endif
 #if SERIAL_MODULE_EN(2)
-static uint8_t tbuf2[SERIAL2_BUF_SIZE];
-static uint8_t rbuf2[SERIAL2_BUF_SIZE];
+static uint8_t tbuf2[SER2_BUF_SIZE];
+static uint8_t rbuf2[SER2_BUF_SIZE];
 #endif
 #if SERIAL_MODULE_EN(3)
-static uint8_t tbuf3[SERIAL3_BUF_SIZE];
-static uint8_t rbuf3[SERIAL3_BUF_SIZE];
+static uint8_t tbuf3[SER3_BUF_SIZE];
+static uint8_t rbuf3[SER3_BUF_SIZE];
 #endif
 #if SERIAL_MODULE_EN(4)
-static uint8_t tbuf4[SERIAL4_BUF_SIZE];
-static uint8_t rbuf4[SERIAL4_BUF_SIZE];
+static uint8_t tbuf4[SER4_BUF_SIZE];
+static uint8_t rbuf4[SER4_BUF_SIZE];
 #endif
 
+#if SERIAL_MODULE_EN(5)
+static uint8_t tbuf5[SER5_BUF_SIZE];
+static uint8_t rbuf5[SER5_BUF_SIZE];
+#endif
+
+#if SERIAL_MODULE_EN(6)
+static uint8_t tbuf6[SER6_BUF_SIZE];
+static uint8_t rbuf6[SER6_BUF_SIZE];
+#endif
 
 static m_dsc_t m_dsc[] = 
 {
     /*UxMODE                 UxSTA                 UxBRG   UxTXREG    U1RXREG   buf_size               mode */
 #if SERIAL_MODULE_EN(1)
-    {(__U1MODEbits_t *) &U1MODE, (__U1STAbits_t *) &U1STA, &U1BRG, &U1TXREG,  &U1RXREG, SERIAL1_BUF_SIZE, SERIAL1_MODE},
+    {(__U1MODEbits_t *) &U1MODE, (__U1STAbits_t *) &U1STA, &U1BRG, &U1TXREG,  &U1RXREG, SER1_BUF_SIZE, SER1_MODE},
 #else
     {NULL,                 NULL,                   NULL,   NULL,      NULL,     0,                       0},
 #endif          
 #if SERIAL_MODULE_EN(2)
-    {(__U1MODEbits_t *) &U2MODE, (__U1STAbits_t *) &U2STA, &U2BRG, &U2TXREG,  &U2RXREG, SERIAL2_BUF_SIZE, SERIAL2_MODE},
+    {(__U1MODEbits_t *) &U2MODE, (__U1STAbits_t *) &U2STA, &U2BRG, &U2TXREG,  &U2RXREG, SER2_BUF_SIZE, SER2_MODE},
 #else
     {NULL,                 NULL,                   NULL,   NULL,      NULL,     0,                       0},
 #endif        
 #if SERIAL_MODULE_EN(3)
-    {(__U1MODEbits_t *) &U3MODE, (__U1STAbits_t *) &U3STA, &U3BRG, &U3TXREG,  &U3RXREG, SERIAL3_BUF_SIZE, SERIAL3_MODE},
+    {(__U1MODEbits_t *) &U3MODE, (__U1STAbits_t *) &U3STA, &U3BRG, &U3TXREG,  &U3RXREG, SER3_BUF_SIZE, SER3_MODE},
 #else
     {NULL,                 NULL,                   NULL,   NULL,      NULL,     0,                       0},
 #endif        
 #if SERIAL_MODULE_EN(4)
-    {(__U1MODEbits_t *) &U4MODE, (__U1STAbits_t *) &U4STA, &U4BRG, &U4TXREG,  &U4RXREG, SERIAL4_BUF_SIZE, SERIAL4_MODE},},
+    {(__U1MODEbits_t *) &U4MODE, (__U1STAbits_t *) &U4STA, &U4BRG, &U4TXREG,  &U4RXREG, SER4_BUF_SIZE, SER4_MODE},
+#else
+    {NULL,                 NULL,                   NULL,   NULL,      NULL,     0,                       0},
+#endif
+#if SERIAL_MODULE_EN(5)
+    {(__U1MODEbits_t *) &U5MODE, (__U1STAbits_t *) &U5STA, &U5BRG, &U5TXREG,  &U5RXREG, SER5_BUF_SIZE, SER5_MODE},
+#else
+    {NULL,                 NULL,                   NULL,   NULL,      NULL,     0,                       0},
+#endif
+#if SERIAL_MODULE_EN(6)
+    {(__U1MODEbits_t *) &U6MODE, (__U1STAbits_t *) &U6STA, &U6BRG, &U6TXREG,  &U6RXREG, SER6_BUF_SIZE, SER6_MODE},
 #else
     {NULL,                 NULL,                   NULL,   NULL,      NULL,     0,                       0},
 #endif
@@ -257,7 +290,7 @@ hw_res_t psp_serial_clear_rx_buf(serial_t id)
 /**
  * Called when a byte is send on the  SERIAL1 modul
  */
-void __ISR(_UART1_TX_VECTOR, IPL_NAME(SERIAL1_PRIO)) U1TXInterrupt(void)
+void __ISR(_UART1_TX_VECTOR, IPL_NAME(SER1_PRIO)) U1TXInterrupt(void)
 {
     SERIAL1_TX_IF = 0;
     
@@ -267,7 +300,7 @@ void __ISR(_UART1_TX_VECTOR, IPL_NAME(SERIAL1_PRIO)) U1TXInterrupt(void)
 /**
  * Called when a byte is received on  SERIAL1 module
  */
-void __ISR(_UART1_RX_VECTOR, IPL_NAME(SERIAL1_PRIO)) U1RXInterrupt(void)
+void __ISR(_UART1_RX_VECTOR, IPL_NAME(SER1_PRIO)) U1RXInterrupt(void)
 {
     SERIAL1_RX_IF = 0;
     while(U1STAbits.URXDA)  psp_serial_rec_next(HW_SERIAL1);
@@ -278,7 +311,7 @@ void __ISR(_UART1_RX_VECTOR, IPL_NAME(SERIAL1_PRIO)) U1RXInterrupt(void)
 /**
  * Called when a byte is send on the  SERIAL2 module
  */
-void __ISR(_UART2_TX_VECTOR, IPL_NAME(SERIAL2_PRIO)) U2TXInterrupt(void)
+void __ISR(_UART2_TX_VECTOR, IPL_NAME(SER2_PRIO)) U2TXInterrupt(void)
 {
     SERIAL2_TX_IF = 0;
 
@@ -289,7 +322,7 @@ void __ISR(_UART2_TX_VECTOR, IPL_NAME(SERIAL2_PRIO)) U2TXInterrupt(void)
 /**
  * Called when a byte is received on  SERIAL2 module
  */
-void __ISR(_UART2_RX_VECTOR, IPL_NAME(SERIAL2_PRIO)) U2RXInterrupt(void)
+void __ISR(_UART2_RX_VECTOR, IPL_NAME(SER2_PRIO)) U2RXInterrupt(void)
 {
     SERIAL2_RX_IF = 0;
     while(U2STAbits.URXDA) psp_serial_rec_next(HW_SERIAL2);
@@ -300,7 +333,7 @@ void __ISR(_UART2_RX_VECTOR, IPL_NAME(SERIAL2_PRIO)) U2RXInterrupt(void)
 /**
  * Called when a byte is send on the SERIAL3 modul
  */
-void __ISR(_UART3_TX_VECTOR, IPL_NAME(SERIAL3_PRIO)) U3TXInterrupt(void)
+void __ISR(_UART3_TX_VECTOR, IPL_NAME(SER3_PRIO)) U3TXInterrupt(void)
 {
     SERIAL3_TX_IF = 0;
 
@@ -310,7 +343,7 @@ void __ISR(_UART3_TX_VECTOR, IPL_NAME(SERIAL3_PRIO)) U3TXInterrupt(void)
 /**
  * Called when a byte is received on SERIAL3 modul
  */
-void __ISR(_UART3_RX_VECTOR, IPL_NAME(SERIAL3_PRIO)) U3RXInterrupt(void)
+void __ISR(_UART3_RX_VECTOR, IPL_NAME(SER3_PRIO)) U3RXInterrupt(void)
 {
     SERIAL3_RX_IF = 0;
     while(U3STAbits.URXDA) psp_serial_rec_next(HW_SERIAL3);
@@ -321,7 +354,7 @@ void __ISR(_UART3_RX_VECTOR, IPL_NAME(SERIAL3_PRIO)) U3RXInterrupt(void)
 /**
  * Called when a byte is send on the SERIAL4 modul
  */
-void __ISR(_UART4_TX_VECTOR, IPL_NAME(SERIAL4_PRIO)) U4TXInterrupt(void)
+void __ISR(_UART4_TX_VECTOR, IPL_NAME(SER4_PRIO)) U4TXInterrupt(void)
 {
     SERIAL4_TX_IF = 0;
 
@@ -331,10 +364,51 @@ void __ISR(_UART4_TX_VECTOR, IPL_NAME(SERIAL4_PRIO)) U4TXInterrupt(void)
 /**
  * Called when a byte is received on SERIAL4 modul
  */
-void __ISR(_UART4_RX_VECTOR, IPL_NAME(SERIAL4_PRIO)) U4RXInterrupt(void)
+void __ISR(_UART4_RX_VECTOR, IPL_NAME(SER4_PRIO)) U4RXInterrupt(void)
 {
     SERIAL4_RX_IF = 0;
     while(U4STAbits.URXDA)  psp_serial_rec_next(HW_SERIAL4);
+}
+#endif
+
+#if SERIAL_MODULE_EN(5)
+/**
+ * Called when a byte is send on the SERIAL5 modul
+ */
+void __ISR(_UART5_TX_VECTOR, IPL_NAME(SER5_PRIO)) U5TXInterrupt(void)
+{
+    SERIAL5_TX_IF = 0;
+
+    psp_serial_send_next(HW_SERIAL5);
+}
+
+/**
+ * Called when a byte is received on SERIAL5 modul
+ */
+void __ISR(_UART5_RX_VECTOR, IPL_NAME(SER5_PRIO)) U5RXInterrupt(void)
+{
+    SERIAL5_RX_IF = 0;
+    while(U5STAbits.URXDA)  psp_serial_rec_next(HW_SERIAL5);
+}
+#endif
+#if SERIAL_MODULE_EN(6)
+/**
+ * Called when a byte is send on the SERIAL6 modul
+ */
+void __ISR(_UART6_TX_VECTOR, IPL_NAME(SER6_PRIO)) U6TXInterrupt(void)
+{
+    SERIAL6_TX_IF = 0;
+
+    psp_serial_send_next(HW_SERIAL6);
+}
+
+/**
+ * Called when a byte is received on SERIAL6 modul
+ */
+void __ISR(_UART6_RX_VECTOR, IPL_NAME(SER6_PRIO)) U6RXInterrupt(void)
+{
+    SERIAL6_RX_IF = 0;
+    while(U6STAbits.URXDA)  psp_serial_rec_next(HW_SERIAL6);
 }
 #endif
 
@@ -350,43 +424,43 @@ static void psp_serial_init_irq(void)
 #ifdef SERIAL1_RX_IF
 #if SERIAL_MODULE_EN(1)
     
-    fifo_init(&m_dsc[HW_SERIAL1].tx_fifo, tbuf1, sizeof(uint8_t), SERIAL1_BUF_SIZE);
-    fifo_init(&m_dsc[HW_SERIAL1].rx_fifo, rbuf1, sizeof(uint8_t), SERIAL1_BUF_SIZE);
+    fifo_init(&m_dsc[HW_SERIAL1].tx_fifo, tbuf1, sizeof(uint8_t), SER1_BUF_SIZE);
+    fifo_init(&m_dsc[HW_SERIAL1].rx_fifo, rbuf1, sizeof(uint8_t), SER1_BUF_SIZE);
     
     SERIAL1_RX_IF = 0;
     SERIAL1_TX_IF = 0;
     SERIAL1_RX_IE = 1;
     SERIAL1_TX_IE = 1;
-    SERIAL1_RX_IP = SERIAL1_PRIO;
-    SERIAL1_TX_IP = SERIAL1_PRIO;
+    SERIAL1_RX_IP = SER1_PRIO;
+    SERIAL1_TX_IP = SER1_PRIO;
 #endif
 #endif
 
 #ifdef SERIAL2_RX_IF
 #if SERIAL_MODULE_EN(2)
-    fifo_init(&m_dsc[HW_SERIAL2].tx_fifo, tbuf2, sizeof(uint8_t), SERIAL2_BUF_SIZE);
-    fifo_init(&m_dsc[HW_SERIAL2].rx_fifo, rbuf2, sizeof(uint8_t), SERIAL2_BUF_SIZE);
+    fifo_init(&m_dsc[HW_SERIAL2].tx_fifo, tbuf2, sizeof(uint8_t), SER2_BUF_SIZE);
+    fifo_init(&m_dsc[HW_SERIAL2].rx_fifo, rbuf2, sizeof(uint8_t), SER2_BUF_SIZE);
     
     SERIAL2_RX_IF = 0;
     SERIAL2_TX_IF = 0;
     SERIAL2_RX_IE = 1;
     SERIAL2_TX_IE = 1;
-    SERIAL2_RX_IP = SERIAL2_PRIO;
-    SERIAL2_TX_IP = SERIAL2_PRIO;
+    SERIAL2_RX_IP = SER2_PRIO;
+    SERIAL2_TX_IP = SER2_PRIO;
 #endif
 #endif
 
 #ifdef SERIAL3_RX_IF
 #if SERIAL_MODULE_EN(3)
-    fifo_init(&m_dsc[HW_SERIAL3].tx_fifo, tbuf3, sizeof(uint8_t), SERIAL3_BUF_SIZE);
-    fifo_init(&m_dsc[HW_SERIAL3].rx_fifo, rbuf3, sizeof(uint8_t), SERIAL3_BUF_SIZE);
+    fifo_init(&m_dsc[HW_SERIAL3].tx_fifo, tbuf3, sizeof(uint8_t), SER3_BUF_SIZE);
+    fifo_init(&m_dsc[HW_SERIAL3].rx_fifo, rbuf3, sizeof(uint8_t), SER3_BUF_SIZE);
     
     SERIAL3_RX_IF = 0;
     SERIAL3_TX_IF = 0;
     SERIAL3_RX_IE = 1;
     SERIAL3_TX_IE = 1;
-    SERIAL3_RX_IP = SERIAL3_PRIO;
-    SERIAL3_TX_IP = SERIAL3_PRIO;
+    SERIAL3_RX_IP = SER3_PRIO;
+    SERIAL3_TX_IP = SER3_PRIO;
     
 #endif
 #endif
@@ -394,18 +468,48 @@ static void psp_serial_init_irq(void)
 #ifdef SERIAL4_RX_IF
 #if SERIAL_MODULE_EN(4)
     
-    fifo_init(&m_dsc[HW_SERIAL4].tx_fifo, tbuf4, sizeof(uint8_t), SERIAL4_BUF_SIZE);
-    fifo_init(&m_dsc[HW_SERIAL4].rx_fifo, rbuf4, sizeof(uint8_t), SERIAL4_BUF_SIZE);
+    fifo_init(&m_dsc[HW_SERIAL4].tx_fifo, tbuf4, sizeof(uint8_t), SER4_BUF_SIZE);
+    fifo_init(&m_dsc[HW_SERIAL4].rx_fifo, rbuf4, sizeof(uint8_t), SER4_BUF_SIZE);
     
     SERIAL4_RX_IF = 0;
     SERIAL4_TX_IF = 0;
     SERIAL4_RX_IE = 1;
     SERIAL4_TX_IE = 1;
-    SERIAL4_RX_IP = SERIAL4_PRIO;
-    SERIAL4_TX_IP = SERIAL4_PRIO;
+    SERIAL4_RX_IP = SER4_PRIO;
+    SERIAL4_TX_IP = SER4_PRIO;
 #endif
 #endif
     
+#ifdef SERIAL5_RX_IF
+#if SERIAL_MODULE_EN(5)
+    
+    fifo_init(&m_dsc[HW_SERIAL5].tx_fifo, tbuf5, sizeof(uint8_t), SER5_BUF_SIZE);
+    fifo_init(&m_dsc[HW_SERIAL5].rx_fifo, rbuf5, sizeof(uint8_t), SER5_BUF_SIZE);
+    
+    SERIAL5_RX_IF = 0;
+    SERIAL5_TX_IF = 0;
+    SERIAL5_RX_IE = 1;
+    SERIAL5_TX_IE = 1;
+    SERIAL5_RX_IP = SER5_PRIO;
+    SERIAL5_TX_IP = SER5_PRIO;
+#endif
+#endif
+    
+    
+#ifdef SERIAL6_RX_IF
+#if SERIAL_MODULE_EN(6)
+    
+    fifo_init(&m_dsc[HW_SERIAL6].tx_fifo, tbuf6, sizeof(uint8_t), SER6_BUF_SIZE);
+    fifo_init(&m_dsc[HW_SERIAL6].rx_fifo, rbuf6, sizeof(uint8_t), SER6_BUF_SIZE);
+    
+    SERIAL6_RX_IF = 0;
+    SERIAL6_TX_IF = 0;
+    SERIAL6_RX_IE = 1;
+    SERIAL6_TX_IE = 1;
+    SERIAL6_RX_IP = SER6_PRIO;
+    SERIAL6_TX_IP = SER6_PRIO;
+#endif
+#endif
 }
 
 /**
@@ -500,6 +604,18 @@ static void psp_serial_rx_int_en(serial_t id, uint8_t state)
             SERIAL4_RX_IE = state;
             break;
 #endif
+            
+#if SERIAL_MODULE_EN(5)
+        case HW_SERIAL5:
+            SERIAL5_RX_IE = state;
+            break;
+#endif
+            
+#if SERIAL_MODULE_EN(6)
+        case HW_SERIAL6:
+            SERIAL6_RX_IE = state;
+            break;
+#endif
         default:
             break;
     }
@@ -539,6 +655,18 @@ static void psp_serial_tx_int_en(serial_t id, uint8_t state)
 #if SERIAL_MODULE_EN(4)
         case HW_SERIAL4:
             SERIAL4_TX_IE = state;
+            break;
+#endif
+            
+#if SERIAL_MODULE_EN(5)
+        case HW_SERIAL5:
+            SERIAL5_TX_IE = state;
+            break;
+#endif
+            
+#if SERIAL_MODULE_EN(6)
+        case HW_SERIAL6:
+            SERIAL6_TX_IE = state;
             break;
 #endif
 

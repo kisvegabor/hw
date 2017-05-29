@@ -130,7 +130,7 @@ hw_res_t serial_send_force(serial_t id, const void * tx_buf, int32_t length)
  *               after call: the number of real received bytes
  * @return HW_RES_OK or error
  */
-hw_res_t serial_rec(serial_t id, void * rx_buf, uint32_t * length)
+hw_res_t serial_rec(serial_t id, void * rx_buf, int32_t * length)
 {
     hw_res_t res = HW_RES_OK;
     
@@ -163,7 +163,7 @@ hw_res_t serial_rec(serial_t id, void * rx_buf, uint32_t * length)
  * @param length how many bytes should be received
  * @return HW_RES_OK or error
  */
-hw_res_t serial_rec_force(serial_t id, void * rx_buf, uint32_t length)
+hw_res_t serial_rec_force(serial_t id, void * rx_buf, int32_t length)
 {
      hw_res_t res = HW_RES_OK;
    

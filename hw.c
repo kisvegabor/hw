@@ -26,6 +26,7 @@
 #include "dev/tp/FT5406EE8.h"
 #include "dev/tp/mouse.h"
 #include "dev/ext_mem/sdcard.h"
+#include "dev/wifi/esp8266.h"
 
 /*********************
  *      DEFINES
@@ -131,6 +132,10 @@ void dev_init(void)
 
 #if USE_MOUSE != 0
     mouse_init();
+#endif
+    
+#if USE_ESP8266 != 0
+    esp8266_init();
 #endif
 }
 

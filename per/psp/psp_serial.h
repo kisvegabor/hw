@@ -28,8 +28,10 @@ typedef enum
     HW_SERIAL2,
     HW_SERIAL3,
     HW_SERIAL4,
+    HW_SERIAL5,
+    HW_SERIAL6,
     HW_SERIAL_NUM,
-    HW_SERIALX = 0xFF /*PORTX means invalid port*/
+    HW_SERIALX = 0xFF /*SERIALX means invalid/unused module*/
 }serial_t;
 
 typedef enum
