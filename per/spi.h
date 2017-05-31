@@ -28,8 +28,13 @@
  **********************/
 typedef enum
 {
+    /*SPI0*/
+    HW_SPI0_CS1 = 0,
+    HW_SPI0_CS2,
+    HW_SPI0_CS3,
+    HW_SPI0_CS4,
     /*SPI1*/
-    HW_SPI1_CS1 = 0,
+    HW_SPI1_CS1,
     HW_SPI1_CS2,
     HW_SPI1_CS3,
     HW_SPI1_CS4,

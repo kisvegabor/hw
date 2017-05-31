@@ -35,50 +35,54 @@
 /*No settings*/
 #endif /*USE_IO*/
 
-
 /*-----------
  *   Timer 
  *----------*/
 #define USE_TMR     1
 #if USE_TMR != 0
 
+/*TMR0*/
+#define TMR0_EN     1
+#if TMR0_EN     !=  0
+#define TMR0_PRIO   HW_INT_PRIO_MID
+#endif
+
 /*TMR1*/
 #define TMR1_EN     0
 #if TMR1_EN     !=  0
 #define TMR1_PRIO   HW_INT_PRIO_MID
-#endif  /*DRV_TMR1_EN*/
+#endif
 
 /*TMR2*/
-#define TMR2_EN     1
+#define TMR2_EN     0
 #if TMR2_EN     !=  0
 #define TMR2_PRIO   HW_INT_PRIO_MID
-#endif  /*TMR2_EN*/
+#endif
 
 /*TMR3*/
 #define TMR3_EN     0
 #if TMR3_EN     !=  0
 #define TMR3_PRIO   HW_INT_PRIO_MID
-#endif  /*TMR3_EN*/
+#endif
 
 /*TMR4*/
 #define TMR4_EN     0
 #if TMR4_EN     !=  0
 #define TMR4_PRIO   HW_INT_PRIO_MID
-#endif  /*TMR4_EN*/
+#endif
 
 /*TMR5*/
 #define TMR5_EN     0
 #if TMR5_EN     !=  0
 #define TMR5_PRIO   HW_INT_PRIO_MID
-#endif  /*TMR5_EN*/
+#endif
 
 /*TMR6*/
 #define TMR6_EN     0
 #if TMR6_EN     !=  0
 #define TMR6_PRIO   HW_INT_PRIO_MID
-#endif  /*TMR6_EN*/
+#endif
 #endif  /*USE_TMR*/
-
 /*----------------
  *     Tick
  *----------------*/

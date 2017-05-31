@@ -72,6 +72,7 @@ typedef struct
 static timer_dsc_t m_dsc[] = 
 {
                 /*period*/      /*fp*/   
+/*TMR0*/   {0,              NULL,},
 /*TMR1*/   {0,              NULL,},
 /*TMR2*/   {0,              NULL,},
 /*TMR3*/   {0,              NULL,},
@@ -82,7 +83,10 @@ static timer_dsc_t m_dsc[] =
 
 static timer_regs_t reg_map[] = 
 {           /*TxCON*/                       /*TMRx*/       /*PRx*/
-#if 0   /*Always ignore timer 1 bcause its differnet from the otheres*/ 
+#if 0   /*Always ignore Timer 0 because its different from the others*/
+		{NULL,                      		  NULL,          NULL},
+#endif
+#if 0   /*Always ignore Timer 1 because its different from the others*/
         {(volatile T1CONBITS*)&T1CONbits,     &TMR1,         &PR2},
 #else
         {NULL,                                NULL,          NULL},

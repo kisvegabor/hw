@@ -27,7 +27,8 @@
 
 typedef enum
 {
-    HW_TMR1 = 0,
+    HW_TMR0 = 0,
+    HW_TMR1,
     HW_TMR2,
     HW_TMR3,
     HW_TMR4,

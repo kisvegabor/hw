@@ -21,6 +21,8 @@
 #include <xc.h>
 #elif PSP_PIC24F_33F != 0
 #include <xc.h>
+#elif PSP_KEA != 0
+#include "derivative.h"
 #endif
 
 /*********************

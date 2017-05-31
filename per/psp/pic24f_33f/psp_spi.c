@@ -43,6 +43,10 @@ typedef struct
 static m_dsc_t m_dsc[] = 
 {
 /*          SPIxCON                               SPIxCON2,                         SPIxSTAT                     SPIxBUF */
+#if 0	/*SPI0 not exists in PIC24/dsPIC33 devices*/
+{NULL                               ,NULL,                                  NULL,                               NULL},
+#endif
+
 #if defined (SPI2CON1) && SPI1_EN != 0
 {(volatile SPI1CON1BITS *) &SPI1CON1, (volatile SPI1CON2BITS *) &SPI1CON2, (volatile SPI1STATBITS *) &SPI1STAT, &SPI1BUF},
 #else

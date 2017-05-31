@@ -24,7 +24,8 @@
 
 typedef enum
 {
-    HW_SERIAL1 = 0,
+    HW_SERIAL0 = 0,
+    HW_SERIAL1,
     HW_SERIAL2,
     HW_SERIAL3,
     HW_SERIAL4,

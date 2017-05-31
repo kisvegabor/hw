@@ -19,6 +19,7 @@
  **********************/
 typedef enum
 {
+    SPI_HW0,
     SPI_HW1,
     SPI_HW2,
     SPI_HW3,

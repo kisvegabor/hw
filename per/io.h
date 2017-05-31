@@ -33,7 +33,11 @@ typedef enum
     IO_PORTF = 5,      IO_PORT6 = 5,
     IO_PORTG = 6,      IO_PORT7 = 6,
     IO_PORTH = 7,      IO_PORT8 = 7,
-    IO_PORT_NUM = 8,
+    IO_PORTI = 8,      IO_PORT9 = 8,
+    IO_PORTJ = 9,      IO_PORT10 = 9,
+    IO_PORTL = 10,     IO_PORT11 = 10,
+    IO_PORTM = 11,     IO_PORT12 = 11,
+    IO_PORT_NUM = 12,
     IO_PORTX = 0xFF /*PORTX means invalid port*/
 }io_port_t;
 

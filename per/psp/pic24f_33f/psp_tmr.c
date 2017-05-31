@@ -62,6 +62,7 @@ typedef struct
 
 static m_dsc_t m_dsc[] = 
 {           /*TxCON*/                /*TMRx*/       /*PRx*/   /*period*/   /*Callback*/
+		{NULL,                       NULL,          NULL,       0,          NULL},	/*TMR0 is different, do not deal with that */
 #if  TMR1_EN != 0
         {(T1CONBITS*)&T1CONbits,     &TMR2,         &PR2,       0,          NULL},
 #else

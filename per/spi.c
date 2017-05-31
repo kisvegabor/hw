@@ -24,7 +24,7 @@
 typedef struct
 {
     io_port_t port;
-    io_port_t pin;
+    io_pin_t pin;
 }spi_cs_pin_t;
 
 
@@ -38,6 +38,10 @@ static uint8_t spisw_byte_xchg(uint8_t tx);
  **********************/
 static const spi_cs_pin_t spi_cs[] = 
 {
+/*SPI0_CS1*/    {SPI0_CS1_PORT,  SPI0_CS1_PIN},
+/*SPI0_CS2*/    {SPI0_CS2_PORT,  SPI0_CS2_PIN},
+/*SPI0_CS3*/    {SPI0_CS3_PORT,  SPI0_CS3_PIN},
+/*SPI0_CS4*/    {SPI0_CS4_PORT,  SPI0_CS4_PIN},
 /*SPI1_CS1*/    {SPI1_CS1_PORT,  SPI1_CS1_PIN},
 /*SPI1_CS2*/    {SPI1_CS2_PORT,  SPI1_CS2_PIN},
 /*SPI1_CS3*/    {SPI1_CS3_PORT,  SPI1_CS3_PIN},
@@ -79,7 +83,7 @@ void spi_init(void)
 {
     /*CS init*/
     spi_t i;
-    for(i = HW_SPI1_CS1; i < HW_SPI_NUM; i++ ) {
+    for(i = HW_SPI0_CS1; i < HW_SPI_NUM; i++ ) {
         io_set_pin_dir(spi_cs[i].port, spi_cs[i].pin, IO_DIR_OUT);
         spi_cs_dis(i);
     }
