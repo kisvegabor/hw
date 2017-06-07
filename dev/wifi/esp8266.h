@@ -43,8 +43,7 @@ bool esp8266_netw_leave(esp8266_cb_t cb);
 bool esp8266_netw_get_ssid(esp8266_cb_t cb);
 bool esp8266_tcp_con(const char * ip, const char * port, esp8266_cb_t cb);
 bool esp8266_tcp_leave(esp8266_cb_t cb);
-bool esp8266_tcp_send(const void * data, uint16_t len);
-bool esp8266_tcp_rec(void * data, int32_t * len);
+bool esp8266_tcp_transf(const void * data, uint16_t len, esp8266_cb_t cb);
 bool esp8266_com_ready(void);
 bool esp8266_busy(void);
 
