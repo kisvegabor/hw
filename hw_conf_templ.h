@@ -19,6 +19,7 @@
 #define PSP_PIC24F_33F     0
 #define PSP_PIC32MX        0
 #define PSP_PIC32MZ        0
+#define PSP_KEA		       0
 #define PSP_PC	       	   0
 
 /*-----------
@@ -410,6 +411,17 @@
 #define ST7565_RS_PIN   IO_PINX
 #endif  /*USE_ST7565*/
 
+/*------------------------------
+ *  Remote display (via serial)
+ *-----------------------------*/
+#define USE_RDISP  0
+#if USE_RDISP != 0
+#define RDISP_DRV		HW_SERIALX
+#define RDISP_BAUD		115200
+#define RDISP_HOR_RES	320
+#define RDISP_VER_RES	240
+#endif  /*USE_RDISP*
+
 /*====================
  * Display input
  *===================*/
@@ -459,6 +471,18 @@
 #define USE_SDCARD     0
 #if USE_SDCARD !=0
 #define SDCARD_SPI_DRV     HW_SPIX_CSX
+#endif
+
+/*====================
+ *  	Sensors
+ *===================*/
+
+/*------------------------------
+ *  ICM20602 (acc, gyro, temp)
+ *-----------------------------*/
+#define USE_ICM20602     0
+#if USE_ICM20602 != 0
+#define ICM20602_SPI_DRV     HW_SPIX_CSX
 #endif
 
 #endif /* Remove this line to enable the content */

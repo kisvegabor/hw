@@ -18,9 +18,9 @@
 /***********************
  *       DEFINES
  ***********************/
-#define IC_PER_US   	((uint32_t)CLOCK_PERIPH / 1000000U) /*Instructions in one usec*/
-#define MAX_PERIOD_US	(214748364) 						/*Max possible timer period in usec. (4^32 / IC_PER_US)*/
-#define TIMER_DEF_PRIO   INT_PRIO_MID 
+#define IC_PER_US   		((uint32_t)CLOCK_PERIPH / 1000000U) /*Instructions in one usec*/
+#define MAX_PERIOD_US		(214748364) 						/*Max possible timer period in usec. (4^32 / IC_PER_US)*/
+#define TMR_PRIO_CONV(x) 	(x-2 < 0 ? 0 : x-2)
 
 #ifdef PIT_LDVAL7
 #define MCU_TIMER_NUM 8
@@ -72,9 +72,53 @@ static bool psp_tmr_id_test(tmr_t id);
  */
 void psp_tmr_init(void)
 {
-	NVIC_ClearPendingIRQ(PIT_CH0_IRQn);  /* Clear any Pending IRQ for all PIT ch0 (#22) */
-	NVIC_EnableIRQ(PIT_CH0_IRQn);        /* Set Enable IRQ for PIT_CH0 */
-	NVIC_SetPriority(PIT_CH0_IRQn,0);    /* Set Priority for PIT_CH0 */
+#if TMR0_EN && MCU_TIMER_NUM > 0
+	NVIC_ClearPendingIRQ(PIT_CH0_IRQn); 		 				/* Clear any Pending IRQ for all PIT ch2 */
+	NVIC_EnableIRQ(PIT_CH0_IRQn);       		 				/* Set Enable IRQ for PIT_CH2 */
+	NVIC_SetPriority(PIT_CH0_IRQn,TMR_PRIO_CONV(TMR0_PRIO));    /* Set Priority for PIT_CH2 */
+#endif
+
+#if TMR1_EN && MCU_TIMER_NUM > 1
+	NVIC_ClearPendingIRQ(PIT_CH1_IRQn);  		 				/* Clear any Pending IRQ for all PIT ch2 */
+	NVIC_EnableIRQ(PIT_CH1_IRQn);        		 				/* Set Enable IRQ for PIT_CH2 */
+	NVIC_SetPriority(PIT_CH1_IRQn,TMR_PRIO_CONV(TMR1_PRIO));    /* Set Priority for PIT_CH2 */
+#endif
+
+#if TMR2_EN && MCU_TIMER_NUM > 2
+	NVIC_ClearPendingIRQ(PIT_CH2_IRQn); 		 				/* Clear any Pending IRQ for all PIT ch3 */
+	NVIC_EnableIRQ(PIT_CH2_IRQn);       		 				/* Set Enable IRQ for PIT_CH3 */
+	NVIC_SetPriority(PIT_CH2_IRQn,TMR_PRIO_CONV(TMR2_PRIO));    /* Set Priority for PIT_CH3 */
+#endif
+
+#if TMR3_EN && MCU_TIMER_NUM > 3
+	NVIC_ClearPendingIRQ(PIT_CH3_IRQn);  		 				/* Clear any Pending IRQ for all PIT ch3*/
+	NVIC_EnableIRQ(PIT_CH3_IRQn);        		 				/* Set Enable IRQ for PIT_CH3 */
+	NVIC_SetPriority(PIT_CH3_IRQn,TMR_PRIO_CONV(TMR3_PRIO));    /* Set Priority for PIT_CH3 */
+#endif
+
+#if TMR4_EN && MCU_TIMER_NUM > 4
+	NVIC_ClearPendingIRQ(PIT_CH4_IRQn);  		 				/* Clear any Pending IRQ for all PIT ch4 */
+	NVIC_EnableIRQ(PIT_CH4_IRQn);       		 				/* Set Enable IRQ for PIT_CH4 */
+	NVIC_SetPriority(PIT_CH4_IRQn,TMR_PRIO_CONV(TMR4_PRIO));    /* Set Priority for PIT_CH4 */
+#endif
+
+#if TMR5_EN && MCU_TIMER_NUM > 5
+	NVIC_ClearPendingIRQ(PIT_CH5_IRQn);  		 				/* Clear any Pending IRQ for all PIT ch5 */
+	NVIC_EnableIRQ(PIT_CH5_IRQn);       		 				/* Set Enable IRQ for PIT_CH5 */
+	NVIC_SetPriority(PIT_CH5_IRQn,TMR_PRIO_CONV(TMR5_PRIO));    /* Set Priority for PIT_CH5 */
+#endif
+
+#if TMR5_EN && MCU_TIMER_NUM > 6
+	NVIC_ClearPendingIRQ(PIT_CH6_IRQn);  		 				/* Clear any Pending IRQ for all PIT ch6 */
+	NVIC_EnableIRQ(PIT_CH6_IRQn);       		 				/* Set Enable IRQ for PIT_CH6 */
+	NVIC_SetPriority(PIT_CH6_IRQn,TMR_PRIO_CONV(TMR6_PRIO));    /* Set Priority for PIT_CH6 */
+#endif
+
+#if TMR5_EN && MCU_TIMER_NUM > 7
+	NVIC_ClearPendingIRQ(PIT_CH7_IRQn);  		 				/* Clear any Pending IRQ for all PIT ch7 */
+	NVIC_EnableIRQ(PIT_CH7_IRQn);       		 				/* Set Enable IRQ for PIT_CH7 */
+	NVIC_SetPriority(PIT_CH7_IRQn,TMR_PRIO_CONV(TMR7_PRIO));    /* Set Priority for PIT_CH7 */
+#endif
 
 	SIM_SCGC |= SIM_SCGC_PIT_MASK;     /* Enable bus clock to PIT module */
 
@@ -135,7 +179,7 @@ void psp_tmr_en_int(tmr_t tmr, bool en)
     if(psp_tmr_id_test(tmr) == false) return;
 
 	if(en == false) {
-		PIT->CHANNEL[tmr].TCTRL &= (~PIT_TCTRL_TIE_MASK);	/* Disable interrupt */
+		PIT->CHANNEL[tmr].TCTRL &= (~PIT_TCTRL_TIE_MASK);		/* Disable interrupt */
 	} else {
 		PIT->CHANNEL[tmr].TCTRL |= PIT_TCTRL_TIE_MASK;  		/* Enable (start) interrupt */
 	}
@@ -162,47 +206,47 @@ void psp_tmr_run(tmr_t tmr, bool en)
  */
 #if TMR0_EN && MCU_TIMER_NUM > 0
 void PIT_CH0_IRQHandler (void) {
-	PIT_TFLG0 |= PIT_TFLG_TIF_MASK; /* Clear PIT0 flag */
+	PIT_TFLG0 |= PIT_TFLG_TIF_MASK; 		/* Clear PIT0 flag */
 	if(dsc[0].cb != NULL) dsc[0].cb();
 }
 #endif
 
-#if TMR0_EN && MCU_TIMER_NUM > 1
+#if TMR1_EN && MCU_TIMER_NUM > 1
 void PIT_CH1_IRQHandler (void) {
 	PIT_TFLG1 |= PIT_TFLG_TIF_MASK; 		/* Clear PIT1 flag */
 	if(dsc[1].cb != NULL) dsc[1].cb();
 }
 #endif
 
-#if TMR0_EN && MCU_TIMER_NUM > 2
+#if TMR2_EN && MCU_TIMER_NUM > 2
 void PIT_CH2_IRQHandler (void) {
 	PIT_TFLG2 |= PIT_TFLG_TIF_MASK; 		/* Clear PIT2 flag */
 	if(dsc[2].cb != NULL) dsc[2].cb();
 }
 #endif
 
-#if TMR0_EN && MCU_TIMER_NUM > 3
+#if TMR3_EN && MCU_TIMER_NUM > 3
 void PIT_CH3_IRQHandler (void) {
 	PIT_TFLG3 |= PIT_TFLG_TIF_MASK; 		/* Clear PIT3 flag */
 	if(dsc[3].cb != NULL) dsc[3].cb();
 }
 #endif
 
-#if TMR0_EN && MCU_TIMER_NUM > 4
+#if TMR4_EN && MCU_TIMER_NUM > 4
 void PIT_CH4_IRQHandler (void) {
 	PIT_TFLG4 |= PIT_TFLG_TIF_MASK; 		/* Clear PIT4 flag */
 	if(dsc[4].cb != NULL) dsc[4].cb();
 }
 #endif
 
-#if TMR0_EN && MCU_TIMER_NUM > 5
+#if TMR5_EN && MCU_TIMER_NUM > 5
 void PIT_CH5_IRQHandler (void) {
 	PIT_TFLG5 |= PIT_TFLG_TIF_MASK; 		/* Clear PIT5 flag */
 	if(dsc[5].cb != NULL) dsc[5].cb();
 }
 #endif
 
-#if TMR0_EN && MCU_TIMER_NUM > 6
+#if TMR6_EN && MCU_TIMER_NUM > 6
 void PIT_CH6_IRQHandler (void) {
 	PIT_TFLG6 |= PIT_TFLG_TIF_MASK; 		/* Clear PIT6 flag */
 	if(dsc[6].cb != NULL) dsc[6].cb();
@@ -210,7 +254,7 @@ void PIT_CH6_IRQHandler (void) {
 #endif
 
 
-#if TMR0_EN && MCU_TIMER_NUM > 7
+#if TMR7_EN && MCU_TIMER_NUM > 7
 void PIT_CH7_IRQHandler (void) {
 	PIT_TFLG7 |= PIT_TFLG_TIF_MASK; 		/* Clear PIT7 flag */
 	if(dsc[7].cb != NULL) dsc[7].cb();
