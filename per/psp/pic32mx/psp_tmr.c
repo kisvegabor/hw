@@ -83,14 +83,8 @@ static timer_dsc_t m_dsc[] =
 
 static timer_regs_t reg_map[] = 
 {           /*TxCON*/                       /*TMRx*/       /*PRx*/
-#if 0   /*Always ignore Timer 0 because its different from the others*/
-		{NULL,                      		  NULL,          NULL},
-#endif
-#if 0   /*Always ignore Timer 1 because its different from the others*/
-        {(volatile T1CONBITS*)&T1CONbits,     &TMR1,         &PR2},
-#else
-        {NULL,                                NULL,          NULL},
-#endif
+		{NULL,                      		  NULL,          NULL},  /*Always ignore Timer 0 because its different from the others*/
+        {NULL,                                NULL,          NULL},  /*Always ignore Timer 1 because its different from the others*/
 #if TMR2_EN != 0
         {(volatile __T2CONbits_t*)&T2CONbits, &TMR2,         &PR2},
 #else

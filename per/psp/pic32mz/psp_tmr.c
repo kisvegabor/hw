@@ -65,15 +65,10 @@ typedef struct
  ***********************/
 
 static m_dsc_t m_dsc[] = 
-{           /*TxCON*/                       /*TMRx*/       /*PRx*/      /*Period*/ /*Callback*/
-#if 0   /*Always ignore Timer 0 because its different from the others*/
-		{NULL,                      		  NULL,          NULL,       	0,      NULL},
-#endif
-#if 0   /*Always ignore Timer 1 because its different from the others*/
-        {(volatile T1CONBITS*)&T1CONbits,     &TMR1,         &PR2,          0,      NULL},
-#else
-        {NULL,                                NULL,          NULL,          0,      NULL},
-#endif
+{      /*TxCON*/                             /*TMRx*/       /*PRx*/      /*Period*/ /*Callback*/
+		{NULL,                      		  NULL,          NULL,       	0,      NULL},  /*Always ignore Timer 0 because its different from the others*/
+        {NULL,                                NULL,          NULL,          0,      NULL}, /*Always ignore Timer 1 because its different from the others*/
+
 #if TMR2_EN != 0
         {(volatile __T2CONbits_t*)&T2CONbits, &TMR2,         &PR2,          0,      NULL},
 #else
