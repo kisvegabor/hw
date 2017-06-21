@@ -103,6 +103,11 @@
 #define USE_SERIAL        0
 #if USE_SERIAL != 0
 
+/*SERIAL0*/
+#define SERIAL0_PRIO       HW_INT_PRIO_OFF /*HW_INT_PRIO_OFF to disable module*/
+#define SERIAL0_BUF_SIZE   0				 /*0: disable module*/
+#define SERIAL0_MODE       (SERIAL_MODE_BASIC)
+
 /*SERIAL1*/
 #define SERIAL1_PRIO       HW_INT_PRIO_OFF /*HW_INT_PRIO_OFF to disable module*/
 #define SERIAL1_BUF_SIZE   0				 /*0: disable module*/
@@ -130,6 +135,17 @@
  *----------*/
 #define USE_SPI         0
 #if USE_SPI != 0
+
+/*SPI0*/
+#define SPI0_EN        1
+#define SPI0_CS1_PORT  IO_PORTB
+#define SPI0_CS1_PIN   IO_PIN5
+#define SPI0_CS2_PORT  IO_PORTX
+#define SPI0_CS2_PIN   IO_PINX
+#define SPI0_CS3_PORT  IO_PORTX
+#define SPI0_CS3_PIN   IO_PINX
+#define SPI0_CS4_PORT  IO_PORTX
+#define SPI0_CS4_PIN   IO_PINX
 
 /*SPI1*/
 #define SPI1_EN        0
