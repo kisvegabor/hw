@@ -27,6 +27,7 @@
 #include "dev/tp/mouse.h"
 #include "dev/ext_mem/sdcard.h"
 #include "dev/wifi/esp8266.h"
+#include "dev/gsm/sim5320.h"
 #include "dev/sens/icm20602.h"
 
 /*********************
@@ -138,6 +139,10 @@ void dev_init(void)
     
 #if USE_ESP8266 != 0
     esp8266_init();
+#endif
+    
+#if USE_SIM5320 != 0
+    sim5320_init();
 #endif
 
 #if USE_ICM20602 != 0

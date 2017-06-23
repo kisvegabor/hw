@@ -24,12 +24,12 @@
  **********************/
 typedef enum 
 {
-    ESP8266_STATE_READY = 0,
+    ESP8266_STATE_OK = 0,
+    ESP8266_STATE_BUSY,
     ESP8266_STATE_ERROR,
     ESP8266_STATE_NUM,
     ESP8266_STATE_INV = 0xFF
 }esp8266_state_t;
-
 
 typedef void (*esp8266_cb_t)(esp8266_state_t, const char *); 
 
@@ -37,14 +37,13 @@ typedef void (*esp8266_cb_t)(esp8266_state_t, const char *);
  * GLOBAL PROTOTYPES
  **********************/
 void esp8266_init(void);
-bool esp8266_netw_list(esp8266_cb_t cb);
-bool esp8266_netw_con(const char * ssid, const char * pwd, esp8266_cb_t cb);
-bool esp8266_netw_leave(esp8266_cb_t cb);
-bool esp8266_netw_get_ssid(esp8266_cb_t cb);
-bool esp8266_tcp_con(const char * ip, const char * port, esp8266_cb_t cb);
-bool esp8266_tcp_leave(esp8266_cb_t cb);
-bool esp8266_tcp_transf(const void * data, uint16_t len, esp8266_cb_t cb);
-bool esp8266_com_ready(void);
+esp8266_state_t esp8266_netw_list(esp8266_cb_t cb);
+esp8266_state_t esp8266_netw_con(const char * ssid, const char * pwd, esp8266_cb_t cb);
+esp8266_state_t esp8266_netw_leave(esp8266_cb_t cb);
+esp8266_state_t esp8266_netw_get_ssid(esp8266_cb_t cb);
+esp8266_state_t esp8266_tcp_con(const char * ip, const char * port, esp8266_cb_t cb);
+esp8266_state_t esp8266_tcp_leave(esp8266_cb_t cb);
+esp8266_state_t esp8266_tcp_transf(const void * data, uint16_t len, esp8266_cb_t cb);
 bool esp8266_busy(void);
 
 /**********************

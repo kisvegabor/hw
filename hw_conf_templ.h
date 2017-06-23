@@ -503,4 +503,30 @@
 
 #endif /* Remove this line to enable the content */
 
+/*===============
+ * WiFi
+ *==============*/
+
+/*------------
+ *  ESP8266
+ *------------*/
+#define USE_ESP8266     0
+#if USE_ESP8266 != 0
+#define ESP8266_DRV         HW_SERIALX
+#define ESP8266_BUF_SIZE    256
+#endif
+
+/*===============
+ * GSM
+ *==============*/
+
+/*------------
+ *  SIM5320
+ *------------*/
+#define USE_SIM5320     0
+#if USE_SIM5320 != 0
+#define SIM5320_DRV         HW_SERIALX
+#define SIM5320_BUF_SIZE    256
+#endif
+
 #endif

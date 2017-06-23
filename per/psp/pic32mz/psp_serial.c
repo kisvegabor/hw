@@ -126,8 +126,7 @@ static uint8_t rbuf6[SER6_BUF_SIZE];
 static m_dsc_t m_dsc[] = 
 {
     /*UxMODE                 UxSTA                 UxBRG   UxTXREG    U1RXREG   buf_size               mode */
-/*SERIAL 0 not implemented in hardware*/
-    {NULL,                 NULL,                   NULL,   NULL,      NULL,     0,                       0},
+    {NULL,                 NULL,                   NULL,   NULL,      NULL,     0,                       0},    /*SERIAL 0 not implemented in hardware*/
 #if SERIAL_MODULE_EN(1)
     {(__U1MODEbits_t *) &U1MODE, (__U1STAbits_t *) &U1STA, &U1BRG, &U1TXREG,  &U1RXREG, SER1_BUF_SIZE, SER1_MODE},
 #else

@@ -63,7 +63,7 @@ static void tcp_transf_handler(void);
 
 static bool ssid_parser(char * buf);
 
-static bool read_line(void);
+static esp8266_state_t read_line(void);
 
 
 /**********************
@@ -94,13 +94,13 @@ LOG_FN("esp8266");
 
 void esp8266_init(void)
 {
-    
+    serial_set_baud(ESP8266_DRV, 115200);
     serial_send_force(ESP8266_DRV, "ATE0\r\n", SERIAL_SEND_STRING);
     
     tick_wait_ms(200);
     
     hw_res_t send_res;
-    bool read_res;
+    esp8266_state_t read_res;
     serial_clear_rx_buf(ESP8266_DRV);
     line_i = 0;
     send_res = serial_send_force(ESP8266_DRV, "AT+CWMODE=3\r\n", SERIAL_SEND_STRING);
@@ -108,9 +108,9 @@ void esp8266_init(void)
         SERR("AT+CWMODE failed during module init (1)");
         return;
     }
-    tick_wait_ms(100);
+    tick_wait_ms(200);
     read_res = read_line();
-    if(read_res == false){
+    if(read_res == ESP8266_STATE_ERROR){
         SERR("AT+CWMODE failed during module init (2)");
         return;
     }
@@ -124,13 +124,13 @@ void esp8266_init(void)
 }
 
 
-bool esp8266_netw_list(esp8266_cb_t cb)
+esp8266_state_t esp8266_netw_list(esp8266_cb_t cb)
 {
     SMSG("Network list...");
     
     if(act_task != ESP8266_TASK_NONE) {
         SWARN("Can not list: busy");
-        return false;
+        return ESP8266_STATE_BUSY;
     }
     
     act_task_state = 0;
@@ -140,18 +140,18 @@ bool esp8266_netw_list(esp8266_cb_t cb)
     line_i = 0;
     act_task = ESP8266_TASK_NETW_LIST;
     
-    return true;
+    return ESP8266_STATE_OK;
     
 }
 
-bool esp8266_netw_con(const char * ssid, const char * pwd, esp8266_cb_t cb)
+esp8266_state_t esp8266_netw_con(const char * ssid, const char * pwd, esp8266_cb_t cb)
 {
     
     SMSG("Network connect...");
     
     if(act_task != ESP8266_TASK_NONE) {
         SWARN("Can not connect: busy");
-        return false;
+        return ESP8266_STATE_BUSY;
     }
     
     strcpy(last_param1, ssid);
@@ -164,18 +164,18 @@ bool esp8266_netw_con(const char * ssid, const char * pwd, esp8266_cb_t cb)
     line_i = 0;
     act_task = ESP8266_TASK_NETW_CON;
     
-    return true;
+    return ESP8266_STATE_OK;
 }
 
 
-bool esp8266_netw_leave(esp8266_cb_t cb)
+esp8266_state_t esp8266_netw_leave(esp8266_cb_t cb)
 {
     
     SMSG("Network leave...");
     
     if(act_task != ESP8266_TASK_NONE) {
         SWARN("Can not leave: busy");
-        return false;
+        return ESP8266_STATE_BUSY;
     }
     
     act_task_state = 0;
@@ -185,16 +185,16 @@ bool esp8266_netw_leave(esp8266_cb_t cb)
     line_i = 0;
     act_task = ESP8266_TASK_NETW_LEAVE;
     
-    return true;
+    return ESP8266_STATE_OK;
 }
 
-bool esp8266_netw_get_ssid(esp8266_cb_t cb)
+esp8266_state_t esp8266_netw_get_ssid(esp8266_cb_t cb)
 {
     SMSG("Get SSID...");
     
     if(act_task != ESP8266_TASK_NONE) {
         SWARN("Can not get SSID: busy");
-        return false;
+        return ESP8266_STATE_BUSY;
     }
     
     act_task_state = 0;
@@ -204,16 +204,16 @@ bool esp8266_netw_get_ssid(esp8266_cb_t cb)
     line_i = 0;
     act_task = ESP8266_TASK_NETW_SSID;
    
-    return true; 
+    return ESP8266_STATE_OK; 
 }
 
-bool esp8266_tcp_con(const char * ip, const char * port, esp8266_cb_t cb)
+esp8266_state_t esp8266_tcp_con(const char * ip, const char * port, esp8266_cb_t cb)
 {
     SMSG("Connecting to TCP server...");
     
     if(act_task != ESP8266_TASK_NONE) {
         SWARN("Can not connect: busy");
-        return false;
+        return ESP8266_STATE_BUSY;
     }
     
     strcpy(last_param1, ip);
@@ -225,16 +225,16 @@ bool esp8266_tcp_con(const char * ip, const char * port, esp8266_cb_t cb)
     line_i = 0;
     act_task = ESP8266_TASK_TCP_CON;
    
-    return true;
+    return ESP8266_STATE_OK;
 }
 
-bool esp8266_tcp_leave(esp8266_cb_t cb)
+esp8266_state_t esp8266_tcp_leave(esp8266_cb_t cb)
 {
     SMSG("Leaving TCP server...");
     
     if(act_task != ESP8266_TASK_NONE) {
         SWARN("Can not leave: busy");
-        return false;
+        return ESP8266_STATE_BUSY;
     }
     
     act_task_state = 0;
@@ -244,19 +244,19 @@ bool esp8266_tcp_leave(esp8266_cb_t cb)
     line_i = 0;
     act_task = ESP8266_TASK_TCP_LEAVE;
     
-    return true;
+    return ESP8266_STATE_OK;
 }
 
-bool esp8266_tcp_transf(const void * data, uint16_t len, esp8266_cb_t cb)
+esp8266_state_t esp8266_tcp_transf(const void * data, uint16_t len, esp8266_cb_t cb)
 {    
     if(act_task != ESP8266_TASK_NONE) {
         SWARN("Can not send to TCP server: busy");
-        return false;
+        return ESP8266_STATE_BUSY;
     }
     
     if(com_ready == false) {
         SWARN("Not ready for comm. (Not connected)");
-        return false;
+        return ESP8266_STATE_ERROR;
     }
     
     memcpy(transf_buf, data, len);
@@ -268,7 +268,7 @@ bool esp8266_tcp_transf(const void * data, uint16_t len, esp8266_cb_t cb)
     line_i = 0;
     act_task = ESP8266_TASK_TCP_TRANSF;
     
-    return true;
+    return ESP8266_STATE_OK;
 }
 
 bool esp8266_busy(void)
@@ -309,7 +309,7 @@ static void esp8266_handler(void * param)
 
 static void netw_list_handler(void)
 {
-    bool read_res;
+    esp8266_state_t read_res;
     
     switch(act_task_state) {
         case 0:
@@ -318,15 +318,15 @@ static void netw_list_handler(void)
             break;
         case 1:
             read_res = read_line();
-            if(read_res != false) {
+            if(read_res == ESP8266_STATE_OK) {
                 if(strcmp(line_buf, "OK\r\n") == 0) {
                     SMSG("No more network to list");
                     act_task = ESP8266_TASK_NONE;
-                    if(act_cb != NULL) act_cb(ESP8266_STATE_READY, "");
+                    if(act_cb != NULL) act_cb(ESP8266_STATE_OK, "");
                 } else {
                     if(ssid_parser(line_buf) != false) {
                         SMSG("Network found: %s", line_buf);
-                        if(act_cb != NULL) act_cb(ESP8266_STATE_READY, line_buf);
+                        if(act_cb != NULL) act_cb(ESP8266_STATE_OK, line_buf);
                     }
                 }
             } 
@@ -342,7 +342,7 @@ static void netw_list_handler(void)
 
 static void netw_con_handler(void)
 {
-    bool read_res;
+    esp8266_state_t read_res;
     char buf[128];
     
      switch(act_task_state) {
@@ -353,11 +353,11 @@ static void netw_con_handler(void)
             break;
         case 1:
             read_res = read_line();
-            if(read_res != false) {
+            if(read_res == ESP8266_STATE_OK) {
                 if (strcmp(line_buf, "OK\r\n") == 0) {
                     act_task = ESP8266_TASK_NONE;
                     SMSG("Connected to network");
-                    if(act_cb != NULL) act_cb(ESP8266_STATE_READY, last_param1);
+                    if(act_cb != NULL) act_cb(ESP8266_STATE_OK, last_param1);
                 } else if(strcmp(line_buf, "WIFI CONNECTED\r\n") == 0) {
                     SMSG("Connected to network");
                     act_task_state++;
@@ -374,12 +374,12 @@ static void netw_con_handler(void)
             break;
          case 2:
             read_res = read_line();
-            if(read_res != false) {
+            if(read_res == ESP8266_STATE_OK) {
                 if(strcmp(line_buf, "WIFI GOT IP\r\n") == 0 || 
                    strcmp(line_buf, "OK\r\n") ==  0) {
                     SMSG("IP received");
                     act_task = ESP8266_TASK_NONE;
-                    if(act_cb != NULL) act_cb(ESP8266_STATE_READY, last_param1);
+                    if(act_cb != NULL) act_cb(ESP8266_STATE_OK, last_param1);
                 } else {
                     SWARN("Wrong resp.: %s", line_buf);
                     act_task = ESP8266_TASK_NONE;
@@ -399,7 +399,7 @@ static void netw_con_handler(void)
 
 static void netw_leave_handler(void)
 {
-    bool read_res;
+    esp8266_state_t read_res;
     
      switch(act_task_state) {
         case 0:
@@ -408,12 +408,12 @@ static void netw_leave_handler(void)
             break;
         case 1:
             read_res = read_line();
-            if(read_res != false) {
+            if(read_res == ESP8266_STATE_OK) {
                 if(strcmp(line_buf, "OK\r\n") == 0) {
                     SMSG("Network leaved");
                     com_ready = false;
                     act_task = ESP8266_TASK_NONE;
-                    if(act_cb != NULL) act_cb(ESP8266_STATE_READY, "");
+                    if(act_cb != NULL) act_cb(ESP8266_STATE_OK, "");
                 } else {
                     SMSG("Wrong resp.: %s", line_buf);
                     if(act_cb != NULL) act_cb(ESP8266_STATE_ERROR, line_buf);
@@ -431,7 +431,7 @@ static void netw_leave_handler(void)
 
 static void netw_ssid_handler(void)
 {
-    bool read_res;
+    esp8266_state_t read_res;
     
      switch(act_task_state) {
         case 0:
@@ -440,13 +440,13 @@ static void netw_ssid_handler(void)
             break;
          case 1:
              read_res = read_line();
-             if(read_res != false) {
+             if(read_res == ESP8266_STATE_OK) {
                  if(strcmp("No AP\r\n", line_buf) == 0) {
                      act_task_state ++;
                  } else {
                     if(ssid_parser(line_buf) != false) {
                         SMSG("Connected to: %s", line_buf);
-                        if(act_cb != NULL) act_cb(ESP8266_STATE_READY, line_buf);
+                        if(act_cb != NULL) act_cb(ESP8266_STATE_OK, line_buf);
                         act_task = ESP8266_TASK_NONE;
                     }
                  }
@@ -454,11 +454,11 @@ static void netw_ssid_handler(void)
             break;
          case 2: 
              read_res = read_line();
-             if(read_res != false) {
+             if(read_res == ESP8266_STATE_OK) {
                  if(strcmp("OK\r\n", line_buf) == 0) {
                      SMSG("Connected to: none");
                     act_task = ESP8266_TASK_NONE;
-                     if(act_cb != NULL) act_cb(ESP8266_STATE_READY, "");
+                     if(act_cb != NULL) act_cb(ESP8266_STATE_OK, "");
                  } else if(strcmp(line_buf, "busy p...\r\n") == 0) {
                      SMSG("Network get SSID: busy p...");
                  } else {
@@ -479,7 +479,7 @@ static void netw_ssid_handler(void)
 
 static void tcp_con_handler(void)
 { 
-    bool read_res;
+    esp8266_state_t read_res;
     char buf[256];
     
      switch(act_task_state) {
@@ -490,14 +490,14 @@ static void tcp_con_handler(void)
             break;
         case 1:
             read_res = read_line();
-            if(read_res != false) {
+            if(read_res == ESP8266_STATE_OK) {
                 if(strcmp(line_buf, "OK\r\n") == 0 ||
                    strcmp(line_buf, "ALREADY CONNECTED\r\n") == 0) {
                     SMSG("Connected to TCP server");
                     com_ready = true;
                     act_task = ESP8266_TASK_NONE;
                     sprintf(buf, "%s:%s", last_param1, last_param2);
-                    if(act_cb != NULL) act_cb(ESP8266_STATE_READY, buf);
+                    if(act_cb != NULL) act_cb(ESP8266_STATE_OK, buf);
                 } else if(strcmp(line_buf, "busy p...\r\n") == 0) {
                     SMSG("Connecting to TCP server...");
                 } else if(strcmp(line_buf, "CONNECT\r\n") == 0) {
@@ -522,7 +522,7 @@ static void tcp_con_handler(void)
 
 static void tcp_leave_handler(void)
 { 
-    bool read_res;
+    esp8266_state_t read_res;
     
      switch(act_task_state) {
         case 0:
@@ -531,7 +531,7 @@ static void tcp_leave_handler(void)
             break;
          case 1:
             read_res = read_line();
-            if(read_res != false) {
+            if(read_res == ESP8266_STATE_OK) {
                 if(strcmp(line_buf, "CLOSED\r\n") == 0) {
                     com_ready = false;
                     act_task_state++;
@@ -544,11 +544,11 @@ static void tcp_leave_handler(void)
             break;
          case 2:
             read_res = read_line();
-            if(read_res != false) {
+            if(read_res == ESP8266_STATE_OK) {
                 if(strcmp(line_buf, "OK\r\n") == 0) {
                     SMSG("TCP Connection closed");
                     act_task = ESP8266_TASK_NONE;
-                    if(act_cb != NULL) act_cb(ESP8266_STATE_READY, "");
+                    if(act_cb != NULL) act_cb(ESP8266_STATE_OK, "");
                 } else {
                     SWARN("TCP Connection close error 2");
                     act_task = ESP8266_TASK_NONE;
@@ -579,7 +579,7 @@ static void tcp_transf_handler(void)
             break;
             
         case 1: /*Wait for OK*/
-            if(read_line() != false) {
+            if(read_line() == ESP8266_STATE_OK) {
                 if(strcmp(line_buf, "OK\r\n") == 0) {
                     SMSG("Data send OK received");
                     act_task_state ++;
@@ -608,7 +608,7 @@ static void tcp_transf_handler(void)
             } 
             break;
         case 3: /*Wait for "SEND OK"*/
-            if(read_line() != false) {
+            if(read_line() == ESP8266_STATE_OK) {
                 sprintf(buf, "Recv %d bytes\r\n", transf_size);
                 if(strcmp(line_buf, "SEND OK\r\n") == 0) {
                     SMSG("Data sent");
@@ -687,7 +687,7 @@ static void tcp_transf_handler(void)
                     if(recp >= transf_size + 1) {
                         SMSG("Data received");
                         act_task = ESP8266_TASK_NONE;
-                        if(act_cb != NULL) act_cb(ESP8266_STATE_READY, (char *)transf_buf);
+                        if(act_cb != NULL) act_cb(ESP8266_STATE_OK, (char *)transf_buf);
                         break;
                     } else {
                         recp++;
@@ -710,7 +710,7 @@ static bool ssid_parser(char * buf)
     uint16_t i = 0, j = 0;
     while(buf[i] != '\"' && buf[i] != '\0') i++;  /*Find the first  " */
     
-    if(buf[i] == '\0') return false;    /*Invalid answer*/
+    if(buf[i] == '\0') return ESP8266_STATE_BUSY;    /*Invalid answer*/
     
     i++;    /*Move after the " sign*/
     
@@ -721,10 +721,10 @@ static bool ssid_parser(char * buf)
     }
     buf[j] = '\0';
     
-    return true;
+    return ESP8266_STATE_OK;
 }
 
-static bool read_line(void)
+static esp8266_state_t read_line(void)
 {   
     hw_res_t res;
     int32_t length;
@@ -749,13 +749,15 @@ static bool read_line(void)
                     {
                         line_buf[line_i] = '\0';   /*Close the sting*/
                         line_i = 0;
+#if ESP8266_LOG_REC_LINES != 0
                         SMSG("Line received: %s", line_buf);
-                        return true;
+#endif
+                        return ESP8266_STATE_OK;
                     }
                 }
             }
         } else {
-            return false;
+            return ESP8266_STATE_ERROR;
         }
     }
     
@@ -764,6 +766,6 @@ static bool read_line(void)
         line_i = 0;
     }
     
-    return false;
+    return ESP8266_STATE_BUSY;
 }
 #endif /*USE_ESP8266 != 0*/
