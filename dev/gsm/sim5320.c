@@ -330,6 +330,8 @@ static void netw_leave_handler(void)
                     if(act_cb != NULL) act_cb(SIM5320_STATE_OK, "");
                 } else if(strcmp(line_buf, "Network closed\r\n") == 0) { 
                     SMSG("Network closed received");
+                } else if(strcmp(line_buf, "+IP ERROR: Network is already closed") == 0) {
+                    SMSG("Network already closed");
                 } else {
                     SWARN("Wrong resp: %s", line_buf);
                     act_task = SIM5320_TASK_NONE;

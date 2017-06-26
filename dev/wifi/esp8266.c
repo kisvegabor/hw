@@ -61,7 +61,7 @@ static void tcp_con_handler(void);
 static void tcp_leave_handler(void);
 static void tcp_transf_handler(void);
 
-static bool ssid_parser(char * buf);
+static esp8266_state_t ssid_parser(char * buf);
 
 static esp8266_state_t read_line(void);
 
@@ -324,7 +324,7 @@ static void netw_list_handler(void)
                     act_task = ESP8266_TASK_NONE;
                     if(act_cb != NULL) act_cb(ESP8266_STATE_OK, "");
                 } else {
-                    if(ssid_parser(line_buf) != false) {
+                    if(ssid_parser(line_buf) == ESP8266_STATE_OK) {
                         SMSG("Network found: %s", line_buf);
                         if(act_cb != NULL) act_cb(ESP8266_STATE_OK, line_buf);
                     }
@@ -444,7 +444,7 @@ static void netw_ssid_handler(void)
                  if(strcmp("No AP\r\n", line_buf) == 0) {
                      act_task_state ++;
                  } else {
-                    if(ssid_parser(line_buf) != false) {
+                    if(ssid_parser(line_buf) == ESP8266_STATE_OK) {
                         SMSG("Connected to: %s", line_buf);
                         if(act_cb != NULL) act_cb(ESP8266_STATE_OK, line_buf);
                         act_task = ESP8266_TASK_NONE;
@@ -705,12 +705,12 @@ static void tcp_transf_handler(void)
     }
 }
     
-static bool ssid_parser(char * buf)
+static esp8266_state_t ssid_parser(char * buf)
 {
     uint16_t i = 0, j = 0;
     while(buf[i] != '\"' && buf[i] != '\0') i++;  /*Find the first  " */
     
-    if(buf[i] == '\0') return ESP8266_STATE_BUSY;    /*Invalid answer*/
+    if(buf[i] == '\0') return ESP8266_STATE_ERROR;    /*Invalid answer*/
     
     i++;    /*Move after the " sign*/
     
