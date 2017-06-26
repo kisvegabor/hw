@@ -137,9 +137,9 @@
 #if USE_SPI != 0
 
 /*SPI0*/
-#define SPI0_EN        1
-#define SPI0_CS1_PORT  IO_PORTB
-#define SPI0_CS1_PIN   IO_PIN5
+#define SPI0_EN        0
+#define SPI0_CS1_PORT  IO_PORTX
+#define SPI0_CS1_PIN   IO_PINX
 #define SPI0_CS2_PORT  IO_PORTX
 #define SPI0_CS2_PIN   IO_PINX
 #define SPI0_CS3_PORT  IO_PORTX
@@ -514,6 +514,7 @@
 #if USE_ESP8266 != 0
 #define ESP8266_DRV         HW_SERIALX
 #define ESP8266_BUF_SIZE    256
+#define ESP8266_LOG_REC_LINES   1
 #endif
 
 /*===============
@@ -527,6 +528,7 @@
 #if USE_SIM5320 != 0
 #define SIM5320_DRV         HW_SERIALX
 #define SIM5320_BUF_SIZE    256
+#define SIM5320_LOG_REC_LINES   1
 #endif
 
 #endif

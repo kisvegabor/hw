@@ -10,6 +10,7 @@
  *      INCLUDES
  *********************/
 #include "hw_conf.h"
+#define LOG_FN(fn)  static const char db_fn[] = {fn};   
 #if USE_LOG != 0
 
 /*********************
@@ -31,8 +32,7 @@ void log_err(const char * path, const char * func_name, const char * format, ...
 /**********************
  *      MACROS
  **********************/
-
-#define LOG_FN(fn)  static const char db_fn[] = {fn};      
+   
 
 
 #if LOG_LEVEL > 0
@@ -52,6 +52,10 @@ void log_err(const char * path, const char * func_name, const char * format, ...
 #else
 #define SMSG(...)  {}
 #endif
+#else
+#define SMSG(...)  {}
+#define SWARN(...)  {}
+#define SERR(...)  {}
 
 #endif
 #endif
