@@ -29,6 +29,8 @@
 #include "dev/wifi/esp8266.h"
 #include "dev/gsm/sim5320.h"
 #include "dev/sens/icm20602.h"
+#include "dev/io_exp/mcp23008.h"
+#include "dev/io_exp/pcf8574.h"
 
 /*********************
  *      DEFINES
@@ -147,6 +149,14 @@ void dev_init(void)
 
 #if USE_ICM20602 != 0
     icm20602_init();
+#endif
+    
+#if USE_MCP23008 != 0
+    mcp23008_init();
+#endif
+    
+#if USE_PCF8574 != 0
+    pcf8574_init();
 #endif
 }
 

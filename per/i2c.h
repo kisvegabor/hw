@@ -28,7 +28,7 @@
  **********************/
 void i2c_init(void);
 hw_res_t i2c_send(i2c_t id, uint8_t adr, void * data_p, uint16_t len);
-hw_res_t i2c_read(i2c_t id, uint8_t adr, uint8_t cmd, void * data_p, uint16_t len); 
+hw_res_t i2c_read(i2c_t id, uint8_t adr, void * cmd, uint8_t cmd_len, void * data_p, uint16_t read_len);
 
 /**********************
  *      MACROS
