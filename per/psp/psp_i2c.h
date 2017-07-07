@@ -25,7 +25,8 @@
  **********************/
 typedef enum
 {
-    HW_I2C1 = 0,
+    HW_I2C0 = 0,
+    HW_I2C1,
     HW_I2C2,
     HW_I2C_NUM,
     HW_I2CX = 0xFF /*always ignored*/

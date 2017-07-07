@@ -9,7 +9,7 @@
  *      INCLUDES
  *********************/
 #include "hw_conf.h"
-#if USE_I2C != 0 && PSP_PIC24F_33F != 0
+#if USE_I2C != 0 && PSP_PIC32MZ != 0
 
 #include <xc.h>
 #include <stddef.h>
@@ -18,19 +18,7 @@
 /*********************
  *      DEFINES
  *********************/
-
-/*For compability check how I2CCON defined*/
-#ifdef I2C1CON1
-#define MY_I2CXCON(x) I2C ## x ##CON1
-#else
-#define MY_I2CXCON(x) I2C##x##CON
-#endif
-
-/*Create the I2CXCONBITS type as well*/
-#define MY_I2CXCON_T__(reg) reg##BITS
-#define MY_I2CXCON_T(reg) MY_I2CXCON_T__(reg)
-
-#define PSP_I2C_BRG_MAX     511 
+#define PSP_I2C_BRG_MAX     65535 
 
 /**********************
  *      TYPEDEFS
@@ -38,8 +26,8 @@
 typedef struct
 {
     /*Registers*/
-    volatile MY_I2CXCON_T(MY_I2CXCON(1)) * I2CxCON;
-    volatile I2C1STATBITS * I2CxSTAT;
+    volatile __I2C1CONbits_t * I2CxCON;
+    volatile __I2C1STATbits_t * I2CxSTAT;
     volatile unsigned int * I2CxBRG;
     volatile unsigned int * I2CxTRN;
     volatile unsigned int * I2CxRCV;
@@ -58,15 +46,15 @@ static hw_res_t psp_i2c_idle(i2c_t id);
  **********************/
 static m_dsc_t m_dsc[] = 
 {
-        /*CON*/                                                  /*STAT*/        /*BRG*/    /*TRN*/   /*RCV*/   /*baud*/
-   {NULL,                       NULL,                      NULL,    NULL,       NULL,    0}, /*I2C0 is not implemented*/
+        /*CON*/                                    /*STAT*/        /*BRG*/    /*TRN*/   /*RCV*/   /*baud*/
+   {NULL,                       NULL,                      NULL,    NULL,       NULL,    0},    /*I2C0 is not implemented*/
 #if I2C1_BAUD != 0
-   {(MY_I2CXCON_T(MY_I2CXCON(1)) * ) &MY_I2CXCON(1), (I2C1STATBITS *) &I2C1STAT, &I2C1BRG, &I2C1TRN, &I2C1RCV, I2C1_BAUD},   
+   {(__I2C1CONbits_t * ) &I2C1CON, (__I2C1STATbits_t *) &I2C1STAT, &I2C1BRG, &I2C1TRN, &I2C1RCV, I2C1_BAUD},   
 #else
    {NULL,                       NULL,                      NULL,    NULL,       NULL,    0},
 #endif
 #if I2C2_BAUD != 0
-   {(MY_I2CXCON_T(MY_I2CXCON(1)) * ) &MY_I2CXCON(2), (I2C1STATBITS *) &I2C2STAT, &I2C2BRG, &I2C2TRN, &I2C2RCV, I2C2_BAUD}, 
+   {(__I2C1CONbits_t * ) &I2C2CON, (__I2C1STATbits_t *) &I2C2STAT, &I2C2BRG, &I2C2TRN, &I2C2RCV, I2C2_BAUD}, 
 #else
    {NULL,                       NULL,                      NULL,    NULL,       NULL,    0},
 #endif   
@@ -90,7 +78,7 @@ void psp_i2c_init(void)
     for(i = HW_I2C0; i < HW_I2C_NUM; i++) {
         if(m_dsc[i].I2CxCON  != NULL) {
             m_dsc[i].I2CxCON->I2CEN = 1;
-            uint32_t baud = (uint32_t) CLOCK_PERIPH / m_dsc[i].baud;
+            uint32_t baud = (uint32_t) CLOCK_PERIPH / (m_dsc[i].baud * 2);
             if(baud > 4) baud -= 2;
             else baud = 2;
             

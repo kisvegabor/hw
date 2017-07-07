@@ -226,6 +226,9 @@
 #define USE_I2C         0
 #if USE_I2C != 0
 
+/*I2C0*/
+#define I2C0_BAUD       0 /* 0: disable the module */   
+
 /*I2C1*/
 #define I2C1_BAUD       0 /* 0: disable the module */   
 
@@ -529,6 +532,28 @@
 #define SIM5320_DRV         HW_SERIALX
 #define SIM5320_BUF_SIZE    256
 #define SIM5320_LOG_REC_LINES   1
+#endif
+
+/*===============
+ * IO EXPANDER
+ *==============*/
+
+/*------------
+ *  MCP23008
+ *------------*/
+#define USE_MCP23008     0
+#if USE_MCP23008 != 0
+#define MCP23008_DRV     HW_I2CX
+#define MCP23008_ADR     0b0100xxx
+#endif
+
+/*------------
+ *  PCF8574
+ *------------*/
+#define USE_PCF8574     0
+#if USE_PCF8574 != 0
+#define PCF8574_DRV     HW_I2CX
+#define PCF8574_ADR     0b0100xxx
 #endif
 
 #endif
