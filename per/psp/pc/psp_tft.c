@@ -20,7 +20,6 @@
  *      DEFINES
  *********************/
 #define SDL_REFR_PERIOD	50	/*ms*/
-#define SDL_WINDOW_FLAGS	(SDL_WINDOW_BORDERLESS)
 
 /**********************
  *      TYPEDEFS
@@ -152,9 +151,9 @@ static int sdl_refr(void * param)
 
     SDL_SetEventFilter(quit_filter, NULL);
 
-	window = SDL_CreateWindow("SDL2 Pixel Drawing",
+	window = SDL_CreateWindow("TFT Simulator",
 		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-		TFT_HOR_RES, TFT_VER_RES, SDL_WINDOW_FLAGS);
+		TFT_HOR_RES, TFT_VER_RES, 0x00);
 
 	renderer = SDL_CreateRenderer(window, -1, 0);
 	texture = SDL_CreateTexture(renderer,
