@@ -84,6 +84,7 @@
 #define TMR6_PRIO   HW_INT_PRIO_MID
 #endif
 #endif  /*USE_TMR*/
+
 /*----------------
  *     Tick
  *----------------*/
@@ -128,7 +129,6 @@
 #define SERIAL4_BUF_SIZE   0
 #define SERIAL4_MODE       (SERIAL_MODE_BASIC)
 #endif /*USE_SERIAL*/
-
 
 /*-----------
  *   SPI 
@@ -285,7 +285,6 @@
 #define TFT_BL_PIN  IO_PINX
 
 #endif
-
 
 /*********************
  *   DEVICE CONFIG
@@ -478,7 +477,6 @@
 #if USE_MOUSE != 0
 /*No settings*/
 #endif
-
 
 /*====================
  *  External memory
