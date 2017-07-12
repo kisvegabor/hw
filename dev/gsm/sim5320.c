@@ -82,7 +82,9 @@ void sim5320_init(void)
 {
     serial_set_baud(SIM5320_DRV, 115200);
     serial_send_force(SIM5320_DRV, "ATE0\r\n", SERIAL_SEND_STRING);
-    tick_wait_ms(200);
+    tick_wait_ms(100);
+    serial_send_force(SIM5320_DRV, "AT+CIPSRIP=0\r\n", SERIAL_SEND_STRING);
+    tick_wait_ms(100);
     
     
     ptask_create(sim5320_handler, 100, PTASK_PRIO_MID, NULL);
@@ -171,13 +173,15 @@ sim5320_state_t sim5320_tcp_leave(sim5320_cb_t cb)
 
 sim5320_state_t sim5320_tcp_transf(const void * data, uint16_t len, sim5320_cb_t cb)
 {
-    SMSG("TCP leave...");
+    SMSG("TCP transfer...");
     
     if(act_task != SIM5320_TASK_NONE) {
         SWARN("Can not connect: busy");
         return SIM5320_STATE_BUSY;
     }
     
+    memcpy(transf_buf, data, len);
+    transf_size = len;
     act_task_state = 0;
     act_timestamp = tick_get();
     act_cb = cb;
@@ -361,7 +365,8 @@ static void tcp_con_handler(void)
         case 1:
             read_res = read_line();
             if(read_res == SIM5320_STATE_OK) {
-                if (strcmp(line_buf, "OK\r\n") == 0) {
+                if (strcmp(line_buf, "OK\r\n") == 0 ||
+                    strcmp(line_buf, "+IP ERROR: Connection is already created\r\n") == 0){
                     act_task = SIM5320_TASK_NONE;
                     SMSG("TCP connected");
                     if(act_cb != NULL) act_cb(SIM5320_STATE_OK, "");
@@ -422,115 +427,60 @@ static void tcp_transf_handler(void)
     int32_t len;
     static uint8_t recp = 0;
     
-     switch(act_task_state) {
+    switch(act_task_state) {
         case 0: /*Send data length*/
-            sprintf(buf, "AT+CIPSEND=%d\r\n", transf_size);
+            sprintf(buf, "AT+CIPSEND=0,%d\r\n", transf_size);
             serial_send_force(SIM5320_DRV, buf, SERIAL_SEND_STRING);
             act_task_state++;
             break;
             
-        case 1: /*Wait for OK*/
-            if(read_line() == SIM5320_STATE_OK) {
-                if(strcmp(line_buf, "OK\r\n") == 0) {
-                    SMSG("Data send OK received");
-                    act_task_state ++;
-                } else {
-                    SWARN("Wrong resp.: %s", line_buf);
-                    act_task = SIM5320_TASK_NONE;
-                    if(act_cb != NULL) act_cb(SIM5320_STATE_ERROR, line_buf);
-                }
-            } 
-            break;
-            
-            
-         case 2: /*Wait for ">" and send data*/
+         case 1: /*Wait for ">" and send data*/
             len = 1;
             read_res = serial_rec(SIM5320_DRV, buf, &len);
             if(read_res == HW_RES_OK && len == 1) {
                 if(buf[0] == '>') {
-                    SMSG("Sending data");
+                    SMSG("'>' Received: sending data...");
                     serial_clear_rx_buf(SIM5320_DRV);    /*Clear before receive the answer*/
                     serial_send_force(SIM5320_DRV, transf_buf, transf_size);
                     line_i = 0;
                     act_task_state ++;
                 } else {
-                    SWARN("Wrong resp.: %c", buf[0]);
+                    SWARN("Waiting for '>', but this received: %c", buf[0]);
                 }
             } 
             break;
-        case 3: /*Wait for "SEND OK"*/
+        case 2: /*Wait for "Send ok"*/
             if(read_line() == SIM5320_STATE_OK) {
-                sprintf(buf, "Recv %d bytes\r\n", transf_size);
                 if(strcmp(line_buf, "Send ok\r\n") == 0) {
                     SMSG("Data sent");
                     recp = 0;
                     act_task_state ++;
-                } else if (strcmp(buf, line_buf) == 0) {
-                    SMSG(line_buf);
                 } else {
-                    SWARN("Wrong resp.: %s", line_buf);
-                    act_task = SIM5320_TASK_NONE;
-                    if(act_cb != NULL) act_cb(SIM5320_STATE_ERROR, buf);
+                    /*Accept other results too. Timeout will work if no "Send ok" received*/
                 }
             } 
             break;
-         case 4: /*Wait for +IPD */
-            while(1) {
-                len = 1;
-                read_res = serial_rec(SIM5320_DRV, &transf_buf[recp], &len);
-                if(read_res == HW_RES_OK && len == 1) {
-                    recp ++;
-                    transf_buf[recp] = '\0';
-                    if(strcmp(transf_buf, "\r\n+IPD") == 0) {
-                        SMSG("+IPD ok");
-                        recp = 0;
-                        act_task_state ++;
-                        break;
-                    } else if(recp > 50) {
-                        SWARN("No +IPD received");
-                        act_task = SIM5320_TASK_NONE;
-                        if(act_cb != NULL) act_cb(SIM5320_STATE_ERROR, "Error while receiving answer");
-                        break;
-                    }
+        case 3: /*Wait for +IPD */
+            if(read_line() == SIM5320_STATE_OK) {
+                if(line_buf[0] == '+' &&
+                   line_buf[1] == 'I' &&
+                   line_buf[2] == 'P' &&
+                   line_buf[3] == 'D') {
+                    sscanf(&line_buf[4], "%d", &transf_size);
+                    SMSG("Rec. length: %d", transf_size);
+                    transf_buf[0] = transf_size & 0xFF;
+                    transf_buf[1] = (transf_size >> 8) & 0xFF;
+                    recp = 2;
+                    act_task_state ++;
                 } else {
-                    break;
+                    SWARN("Wrong resp: %s", line_buf);
+                    act_task = SIM5320_TASK_NONE;
+                    if(act_cb != NULL) act_cb(SIM5320_STATE_ERROR, line_buf); 
                 }
-            }
+            } 
             break;
-            
-         case 5: /*Receiving data length*/
-            while(1) {
-                len = 1;
-                read_res = serial_rec(SIM5320_DRV, &transf_buf[recp], &len);
-                if(read_res == HW_RES_OK && len == 1) {
-                    if(transf_buf[recp] == ':') {
-                        transf_buf[recp + 1] = '\0'; 
-                        sscanf(transf_buf, "%d", &transf_size);
-                        SMSG("Rec. length: %d", transf_size);
-                        if(transf_size > SIM5320_BUF_SIZE) {
-                            SWARN("Too long data: %d", transf_size);
-                            act_task = SIM5320_TASK_NONE;
-                            if(act_cb != NULL) act_cb(SIM5320_STATE_ERROR, "Too long data");
-                        } else {
-                            transf_buf[0] = (uint8_t) transf_size & 0xFF;    /*Save the data length*/ 
-                            transf_buf[1] = (uint8_t) (transf_size >> 8) & 0xFF;
-                            recp = 2;
-                            act_task_state ++;
-                            break;
-                        }
-                    } else if(recp > 8) {
-                        SWARN("No answ. length received");
-                        act_task = SIM5320_TASK_NONE;
-                        if(act_cb != NULL) act_cb(SIM5320_STATE_ERROR, "Too long length info");
-                        break;
-                    }
-                    recp ++;
-                } else {
-                    break;
-                }
-            }
-            break;
-         case 6: /*Receiving data*/
+       
+        case 4: /*Receiving data*/
             while(1) {
                 len = 1;
                 read_res = serial_rec(SIM5320_DRV, &transf_buf[recp], &len); 
@@ -548,7 +498,8 @@ static void tcp_transf_handler(void)
                 }
             }
             break;
-     }
+            
+    }
      
     if(tick_elaps(act_timestamp) > SIM5320_TOUT_TCP_TRANSF) {
             act_cb(SIM5320_STATE_ERROR, "Timeout");

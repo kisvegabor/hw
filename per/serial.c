@@ -75,7 +75,7 @@ hw_res_t serial_send(serial_t id, const void * tx_buf, int32_t * length)
     for(i = 0; i < *length; i++) {
         res = psp_serial_wr(id, buf8[i]);
 
-        /*Return if any error ocurred*/
+        /*Return if any error occurred*/
         if(res != HW_RES_OK) {
             break;
         }
