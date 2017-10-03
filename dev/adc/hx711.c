@@ -45,7 +45,7 @@
 void hx711_init(void)
 {
     io_set_pin_dir(HX711_SCK_PORT, HX711_SCK_PIN, IO_DIR_OUT);
-    io_set_pin_dir(HX711_SDO_PORT, HX711_SDO_PORT, IO_DIR_IN);
+    io_set_pin_dir(HX711_SDO_PORT, HX711_SDO_PIN, IO_DIR_IN);
     io_set_pin(HX711_SCK_PORT, HX711_SCK_PIN, 0);
 }
 
