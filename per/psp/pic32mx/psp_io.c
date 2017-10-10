@@ -10,13 +10,10 @@
 
 #if USE_IO != 0 && PSP_PIC32MX != 0
 
-#define _SUPPRESS_PLIB_WARNING
-#define _DISABLE_OPENADC10_CONFIGPORT_WARNING
-#include <plib.h>
-
 #include "hw/hw.h"
 #include "hw/per/io.h"
 #include <stddef.h>
+#include <proc/p32mx695f512h.h>
 
 /*********************
  *      DEFINES
@@ -102,7 +99,7 @@ void psp_io_init(void)
     /*Enable digital buffers by default*/
     AD1PCFG = 0xFFFFFFFF;
     
-    mJTAGPortEnable(0);    
+    DDPCONbits.JTAGEN = 0; //mJTAGPortEnable(0);    
 }
 
 /**

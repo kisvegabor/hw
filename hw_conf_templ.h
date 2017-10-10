@@ -519,7 +519,7 @@
 #define ICM20602_SPI_DRV     HW_SPIX_CSX
 #endif
 
-*---------------------------------------
+/*---------------------------------------
  *  HCSR04 (Ultrasonic proximity module)
  *---------------------------------------*/
 #define USE_HCSR04     1
