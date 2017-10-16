@@ -363,10 +363,10 @@
  *---------------------------------------*/
 #define USE_HX711     1
 #if USE_HX711 != 0
-#define HX711_SDO_PORT    IO_PORTD
-#define HX711_SDO_PIN     IO_PIN1
-#define HX711_SCK_PORT    IO_PORTA
-#define HX711_SCK_PIN     IO_PIN14
+#define HX711_SDO_PORT    IO_PORTX
+#define HX711_SDO_PIN     IO_PINX
+#define HX711_SCK_PORT    IO_PORTX
+#define HX711_SCK_PIN     IO_PINX
 #endif
 
 /*=======================
@@ -524,10 +524,10 @@
  *---------------------------------------*/
 #define USE_HCSR04     1
 #if USE_HCSR04 != 0
-#define HCSR04_TRIG_PORT    IO_PORTG
-#define HCSR04_TRIG_PIN     IO_PIN6
-#define HCSR04_ECHO_PORT    IO_PORTD
-#define HCSR04_ECHO_PIN     IO_PIN15
+#define HCSR04_TRIG_PORT    IO_PORTX
+#define HCSR04_TRIG_PIN     IO_PINX
+#define HCSR04_ECHO_PORT    IO_PORTX
+#define HCSR04_ECHO_PIN     IO_PINX
 #endif
         
 /*===============
