@@ -13,6 +13,7 @@
 #define _DISABLE_OPENADC10_CONFIGPORT_WARNING
 #include <stddef.h>
 #include <xc.h>
+#include <plib.h>
 #include "../../tmr.h"
 
 
