@@ -530,6 +530,28 @@
 #define HCSR04_ECHO_PIN     IO_PINX
 #endif
         
+/*---------------------------------
+ * DS18B20 (1 wire temperature meter)
+ *---------------------------------*/
+#define USE_DS18B20     0
+#if USE_DS18B20 != 0
+#define DS18B20_BUS0_PULL   {/*Pin to Low*/; /*Pin to Output*/;}     
+#define DS18B20_BUS0_REL    {/*Pin to Input*/;}  
+#define DS18B20_BUS0_RD(p)  {(*p) = 0 /*Pin read*/;}
+
+#define DS18B20_BUS1_PULL   {/*Pin to Low*/; /*Pin to Output*/;}
+#define DS18B20_BUS1_REL    {/*Pin to Input*/;}
+#define DS18B20_BUS1_RD(p)  {(*p) = 0 /*Pin read*/;}
+
+#define DS18B20_BUS2_PULL   {/*Pin to Low*/; /*Pin to Output*/;}
+#define DS18B20_BUS2_REL    {/*Pin to Input*/;}
+#define DS18B20_BUS2_RD(p)  {(*p) = 0 /*Pin read*/;}
+
+#define DS18B20_BUS3_PULL   {/*Pin to Low*/; /*Pin to Output*/;}
+#define DS18B20_BUS3_REL    {/*Pin to Input*/;}
+#define DS18B20_BUS3_RD(p)  {(*p) = 0 /*Pin read*/;}
+#endif
+
 /*===============
  * WiFi
  *==============*/
