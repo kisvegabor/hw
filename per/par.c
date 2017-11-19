@@ -216,12 +216,12 @@ static void par_sw_wr_array(uint32_t adr, const uint16_t * data_p, uint32_t leng
         /*In NOT slow mode write with max speed (in sw mode the max is slow too)*/
         
         for(i = 0; i < len_mod; i++) {
-            REPEATE8(REPEATE8(PARSW_WR_DATA(*data_p); data_p ++));
+            REPEATE8(REPEATE8(PARSW_WR_DATA(data_p); data_p ++));
         }    
 
         len_mod = length % BATCH_COM;
         for(i = 0; i < len_mod; i++) {
-            PARSW_WR_DATA(*data_p);
+            PARSW_WR_DATA(data_p);
             data_p++;
         }
     }
@@ -231,7 +231,7 @@ static void par_sw_fill(uint32_t adr, uint16_t data, uint32_t length)
 {
     uint16_t * data_p = &data; 
     /* Write the first data, it will set the data port */
-    PARSW_WR_DATA(*data_p);
+    PARSW_WR_DATA(data_p);
     data_p++;
     length --;
     

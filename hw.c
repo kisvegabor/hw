@@ -18,6 +18,7 @@
 #include "dev/ui/led.h"
 #include "dev/ui/buzzer.h"
 #include "dev/ui/log.h"
+#include "dev/adc/hx711.h"
 #include "dev/dispc/SSD1963.h"
 #include "dev/dispc/R61581.h"
 #include "dev/dispc/ST7565.h"
@@ -29,6 +30,7 @@
 #include "dev/wifi/esp8266.h"
 #include "dev/gsm/sim5320.h"
 #include "dev/sens/icm20602.h"
+#include "dev/sens/hcsr04.h"
 #include "dev/io_exp/mcp23008.h"
 #include "dev/io_exp/pcf8574.h"
 
@@ -106,6 +108,10 @@ void dev_init(void)
 #if USE_LOG != 0
     log_init();
 #endif
+    
+#if USE_HX711
+    hx711_init();
+#endif
 
 #if USE_SDCARD != 0
     sdcard_init();
@@ -149,6 +155,10 @@ void dev_init(void)
 
 #if USE_ICM20602 != 0
     icm20602_init();
+#endif
+    
+#if USE_HCSR04
+    hcsr04_init();
 #endif
     
 #if USE_MCP23008 != 0

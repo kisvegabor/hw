@@ -16,6 +16,8 @@
 /*---------------
  *  PSP select 
  *--------------*/
+/* Choose a hardware to enable to corresponding Processor Support Package (psp)
+ * See hw/per/psp/ directories */
 #define PSP_PIC24F_33F     0
 #define PSP_PIC32MX        0
 #define PSP_PIC32MZ        0
@@ -352,6 +354,21 @@
 #define LOG_SERIAL_BAUD 115200
 #endif /*USE_LOG*/
 
+/*===============================
+ *   Analog/Digital Converters
+ *=============================*/
+
+/*---------------------------------------
+ *  HX711 (24 bit ADC)
+ *---------------------------------------*/
+#define USE_HX711     1
+#if USE_HX711 != 0
+#define HX711_SDO_PORT    IO_PORTX
+#define HX711_SDO_PIN     IO_PINX
+#define HX711_SCK_PORT    IO_PORTX
+#define HX711_SCK_PIN     IO_PINX
+#endif
+
 /*=======================
  *   Display controllers
  *======================*/
@@ -502,7 +519,38 @@
 #define ICM20602_SPI_DRV     HW_SPIX_CSX
 #endif
 
-#endif /* Remove this line to enable the content */
+/*---------------------------------------
+ *  HCSR04 (Ultrasonic proximity module)
+ *---------------------------------------*/
+#define USE_HCSR04     1
+#if USE_HCSR04 != 0
+#define HCSR04_TRIG_PORT    IO_PORTX
+#define HCSR04_TRIG_PIN     IO_PINX
+#define HCSR04_ECHO_PORT    IO_PORTX
+#define HCSR04_ECHO_PIN     IO_PINX
+#endif
+        
+/*---------------------------------
+ * DS18B20 (1 wire temperature meter)
+ *---------------------------------*/
+#define USE_DS18B20     0
+#if USE_DS18B20 != 0
+#define DS18B20_BUS0_PULL   {/*Pin to Low*/; /*Pin to Output*/;}     
+#define DS18B20_BUS0_REL    {/*Pin to Input*/;}  
+#define DS18B20_BUS0_RD(p)  {(*p) = 0 /*Pin read*/;}
+
+#define DS18B20_BUS1_PULL   {/*Pin to Low*/; /*Pin to Output*/;}
+#define DS18B20_BUS1_REL    {/*Pin to Input*/;}
+#define DS18B20_BUS1_RD(p)  {(*p) = 0 /*Pin read*/;}
+
+#define DS18B20_BUS2_PULL   {/*Pin to Low*/; /*Pin to Output*/;}
+#define DS18B20_BUS2_REL    {/*Pin to Input*/;}
+#define DS18B20_BUS2_RD(p)  {(*p) = 0 /*Pin read*/;}
+
+#define DS18B20_BUS3_PULL   {/*Pin to Low*/; /*Pin to Output*/;}
+#define DS18B20_BUS3_REL    {/*Pin to Input*/;}
+#define DS18B20_BUS3_RD(p)  {(*p) = 0 /*Pin read*/;}
+#endif
 
 /*===============
  * WiFi
@@ -554,4 +602,6 @@
 #define PCF8574_ADR     0b0100xxx
 #endif
 
-#endif
+#endif  /*HW_CONF_H*/
+
+#endif /* Remove this line to enable the content */
