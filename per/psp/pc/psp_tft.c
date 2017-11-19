@@ -19,7 +19,7 @@
 /*********************
  *      DEFINES
  *********************/
-#define SDL_REFR_PERIOD	50	/*ms*/
+#define SDL_REFR_PERIOD	    50	/*ms*/
 
 /**********************
  *      TYPEDEFS
@@ -153,7 +153,7 @@ static int sdl_refr(void * param)
 
 	window = SDL_CreateWindow("TFT Simulator",
 		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-		TFT_HOR_RES, TFT_VER_RES, 0x00);
+		TFT_HOR_RES, TFT_VER_RES, 0);       /*last param. SDL_WINDOW_BORDERLESS to hide borders*/
 
 	renderer = SDL_CreateRenderer(window, -1, 0);
 	texture = SDL_CreateTexture(renderer,
@@ -181,6 +181,7 @@ static int sdl_refr(void * param)
 		/*Mouse handling*/
 		mouse_handler();
 #endif
+
 		/*Sleep some time*/
 		usleep(SDL_REFR_PERIOD * 1000);
 	}

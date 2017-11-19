@@ -32,8 +32,8 @@ static void (*systick_cb_a[TICK_FUNC_NUM])(void);
 /**********************
  *  STATIC VARIABLES
  **********************/
-volatile bool started = false;
-volatile uint32_t sys_time = 0;
+volatile static bool started = false;
+volatile static uint32_t sys_time = 0;
 
 /**********************
  *      MACROS

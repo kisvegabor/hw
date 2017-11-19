@@ -85,11 +85,9 @@ void mouse_handler(void)
 			}
 			break;
 		case SDL_MOUSEMOTION:
-			if (left_button_down)
-			{
-				last_x = event.motion.x;
-				last_y = event.motion.y;
-			}
+            last_x = event.motion.x;
+            last_y = event.motion.y;
+
 			break;
 		}
 	}
