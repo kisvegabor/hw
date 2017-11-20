@@ -147,6 +147,9 @@ void fbdev_fill(int32_t x1, int32_t y1, int32_t x2, int32_t y2, color_t color)
         /*Not supported bit per pixel*/
     }
 
+    //May be some direct update command is required
+    //ret = ioctl(state->fd, FBIO_UPDATE, (unsigned long)((uintptr_t)rect));
+
 }
 
 /**
@@ -223,6 +226,9 @@ void fbdev_map(int32_t x1, int32_t y1, int32_t x2, int32_t y2, const color_t * c
     } else {
         /*Not supported bit per pixel*/
     }
+
+    //May be some direct update command is required
+    //ret = ioctl(state->fd, FBIO_UPDATE, (unsigned long)((uintptr_t)rect));
 }
 
 
