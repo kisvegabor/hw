@@ -33,7 +33,7 @@ static int sdl_refr(void * param);
 /***********************
  *   GLOBAL PROTOTYPES
  ***********************/
-void mouse_handler(void);
+void mouse_handler(SDL_Event *event);
 
 /**********************
  *  STATIC VARIABLES
@@ -74,6 +74,10 @@ hw_res_t psp_tft_init(void)
 
 /**
  * Fill out the marked area with a color
+ * @param x1 left coordinate
+ * @param y1 top coordinate
+ * @param x2 right coordinate
+ * @param y2 bottom coordinate
  * @param color fill color
  */
 void psp_tft_fill(int32_t x1, int32_t y1, int32_t x2, int32_t y2, color_t color)
@@ -105,6 +109,10 @@ void psp_tft_fill(int32_t x1, int32_t y1, int32_t x2, int32_t y2, color_t color)
 
 /**
  * Put a color map to the marked area
+ * @param x1 left coordinate
+ * @param y1 top coordinate
+ * @param x2 right coordinate
+ * @param y2 bottom coordinate
  * @param color_p an array of colors
  */
 void psp_tft_map(int32_t x1, int32_t y1, int32_t x2, int32_t y2, const color_t * color_p)
@@ -177,10 +185,16 @@ static int sdl_refr(void * param)
 			SDL_RenderPresent(renderer);
 		}
 
+	    SDL_Event event;
+	    while(SDL_PollEvent(&event)) {
 #if USE_MOUSE != 0
-		/*Mouse handling*/
-		mouse_handler();
+            mouse_handler(&event);
 #endif
+
+#if USE_KEYBOARD
+            keyboard_handler(&event);
+#endif
+	    }
 
 		/*Sleep some time*/
 		usleep(SDL_REFR_PERIOD * 1000);

@@ -46,7 +46,7 @@ void mouse_init(void)
 {
 
 }
-#include <stdio.h>
+
 /**
  * Get the current position and state of the mouse
  * @param x point to variable, the x coordinate will be stored here
@@ -65,32 +65,27 @@ bool mouse_get(int16_t * x, int16_t * y)
 /**
  * It will be called from the main SDL thread
  */
-void mouse_handler(void)
+void mouse_handler(SDL_Event *event)
 {
-	SDL_Event event;
+    switch (event->type) {
+        case SDL_MOUSEBUTTONUP:
+            if (event->button.button == SDL_BUTTON_LEFT)
+                left_button_down = false;
+            break;
+        case SDL_MOUSEBUTTONDOWN:
+            if (event->button.button == SDL_BUTTON_LEFT) {
+                left_button_down = true;
+                last_x = event->motion.x;
+                last_y = event->motion.y;
+            }
+            break;
+        case SDL_MOUSEMOTION:
+            last_x = event->motion.x;
+            last_y = event->motion.y;
 
-	while(SDL_PollEvent(&event))
-	{
-		switch (event.type)
-		{
-		case SDL_MOUSEBUTTONUP:
-			if (event.button.button == SDL_BUTTON_LEFT)
-				left_button_down = false;
-			break;
-		case SDL_MOUSEBUTTONDOWN:
-			if (event.button.button == SDL_BUTTON_LEFT) {
-				left_button_down = true;
-				last_x = event.motion.x;
-				last_y = event.motion.y;
-			}
-			break;
-		case SDL_MOUSEMOTION:
-            last_x = event.motion.x;
-            last_y = event.motion.y;
+            break;
+    }
 
-			break;
-		}
-	}
 }
 
 /**********************
