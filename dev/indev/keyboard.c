@@ -7,6 +7,7 @@
  *      INCLUDES
  *********************/
 #include "keyboard.h"
+#if USE_KEYBOARD != 0
 
 /*********************
  *      DEFINES
@@ -96,3 +97,4 @@ static uint32_t keycode_to_ascii(uint32_t sdl_key)
         default: return sdl_key;
     }
 }
+#endif
