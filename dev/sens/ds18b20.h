@@ -14,6 +14,7 @@ extern "C" {
  *      INCLUDES
  *********************/
 #include "hw_conf.h"
+#if USE_DS18B20 != 0
     
 #include <stdint.h>
 
@@ -42,6 +43,7 @@ int16_t ds18b20_read_result(ds18b20_bus_t bus);
  *      MACROS
  **********************/
 
+#endif
 
 #ifdef __cplusplus
 } /* extern "C" */
