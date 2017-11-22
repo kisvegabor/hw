@@ -1,10 +1,10 @@
 /**
- * @file ds18b20.h
- * 
+ * @file keyboard.h
+ *
  */
 
-#ifndef DS18B20_H
-#define DS18B20_H
+#ifndef KEYBOARD_H
+#define KEYBOARD_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -14,9 +14,10 @@ extern "C" {
  *      INCLUDES
  *********************/
 #include "hw_conf.h"
-#if USE_DS18B20 != 0
-    
-#include <stdint.h>
+#if USE_KEYBOARD != 0
+
+#include <stdbool.h>
+#include <SDL2/SDL.h>
 
 /*********************
  *      DEFINES
@@ -25,28 +26,21 @@ extern "C" {
 /**********************
  *      TYPEDEFS
  **********************/
-typedef enum {
-    DS18B20_BUS_0,
-    DS18B20_BUS_1,
-    DS18B20_BUS_2,
-    DS18B20_BUS_3,
-}ds18b20_bus_t;
 
 /**********************
  * GLOBAL PROTOTYPES
  **********************/
-void ds18b20_init(void);
-void ds18b20_start_conv(ds18b20_bus_t bus);
-int16_t ds18b20_read_result(ds18b20_bus_t bus);
+bool keyboard_read(uint32_t *key);
+void keyboard_handler(SDL_Event *event);
 
 /**********************
  *      MACROS
  **********************/
 
-#endif
+#endif /*USE_KEYBOARD*/
 
 #ifdef __cplusplus
 } /* extern "C" */
 #endif
 
-#endif /*DS18B20_H*/
+#endif /*KEYBOARD_H*/

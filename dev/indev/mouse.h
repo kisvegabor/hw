@@ -30,7 +30,6 @@
 void mouse_init(void);
 bool mouse_get(int16_t * x, int16_t * y);
 
-
 /**********************
  *      MACROS
  **********************/

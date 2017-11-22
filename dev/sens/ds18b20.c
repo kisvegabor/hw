@@ -7,6 +7,8 @@
  *      INCLUDES
  *********************/
 #include "ds18b20.h"
+#if USE_DS18B20 != 0
+
 #include "../../per/tick.h"
 #include "../../per/io.h"
 #include "../../per/psp/psp_io.h"
@@ -221,3 +223,5 @@ static inline void pin_rel(ds18b20_bus_t bus)
         case DS18B20_BUS_3: DS18B20_BUS3_REL; break;
     }
 }
+#endif
+

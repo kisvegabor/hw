@@ -22,10 +22,12 @@
 #include "dev/dispc/SSD1963.h"
 #include "dev/dispc/R61581.h"
 #include "dev/dispc/ST7565.h"
+#include "dev/dispc/fbdev.h"
 #include "dev/dispc/rdisp.h"
-#include "dev/tp/XPT2046.h"
-#include "dev/tp/FT5406EE8.h"
-#include "dev/tp/mouse.h"
+#include "dev/indev/XPT2046.h"
+#include "dev/indev/FT5406EE8.h"
+#include "dev/indev/mouse.h"
+#include "dev/indev/keyboard.h"
 #include "dev/ext_mem/sdcard.h"
 #include "dev/wifi/esp8266.h"
 #include "dev/gsm/sim5320.h"
@@ -127,6 +129,10 @@ void dev_init(void)
     
 #if USE_ST7565 != 0
     st7565_init();
+#endif
+
+#if USE_FBDEV != 0
+    fbdev_init();
 #endif
     
 #if USE_RDISP != 0

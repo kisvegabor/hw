@@ -457,8 +457,16 @@
 #define RDISP_VER_RES	240
 #endif  /*USE_RDISP*
 
+/*-----------------------------------------
+ *  Linux frame buffer device (/dev/fbx)
+ *-----------------------------------------*/
+#define USE_FBDEV       1
+#if USE_FBDEV != 0
+#define FBDEV_PATH  "/dev/fb0"
+#endif
+
 /*====================
- * Display input
+ * Input devices
  *===================*/
 
 /*--------------
@@ -492,6 +500,15 @@
  *------------------------------*/
 #define USE_MOUSE 0
 #if USE_MOUSE != 0
+/*No settings*/
+#endif
+
+
+/*-------------------------------
+ *   Keyboard of a PC
+ *------------------------------*/
+#define USE_KEYBOARD    1
+#if USE_KEYBOARD != 0
 /*No settings*/
 #endif
 

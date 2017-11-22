@@ -1,10 +1,10 @@
 /**
- * @file ds18b20.h
- * 
+ * @file fbdev.h
+ *
  */
 
-#ifndef DS18B20_H
-#define DS18B20_H
+#ifndef FBDEV_H
+#define FBDEV_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -14,9 +14,10 @@ extern "C" {
  *      INCLUDES
  *********************/
 #include "hw_conf.h"
-#if USE_DS18B20 != 0
-    
+#if USE_FBDEV != 0
+
 #include <stdint.h>
+#include "misc/gfx/color.h"
 
 /*********************
  *      DEFINES
@@ -25,28 +26,22 @@ extern "C" {
 /**********************
  *      TYPEDEFS
  **********************/
-typedef enum {
-    DS18B20_BUS_0,
-    DS18B20_BUS_1,
-    DS18B20_BUS_2,
-    DS18B20_BUS_3,
-}ds18b20_bus_t;
 
 /**********************
  * GLOBAL PROTOTYPES
  **********************/
-void ds18b20_init(void);
-void ds18b20_start_conv(ds18b20_bus_t bus);
-int16_t ds18b20_read_result(ds18b20_bus_t bus);
+void fbdev_init(void);
+void fbdev_fill(int32_t x1, int32_t y1, int32_t x2, int32_t y2, color_t color);
+void fbdev_map(int32_t x1, int32_t y1, int32_t x2, int32_t y2, const color_t * color_p);
 
 /**********************
  *      MACROS
  **********************/
 
-#endif
+#endif  /*USE_FBDEV*/
 
 #ifdef __cplusplus
 } /* extern "C" */
 #endif
 
-#endif /*DS18B20_H*/
+#endif /*FBDEV_H*/
