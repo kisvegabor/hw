@@ -156,7 +156,6 @@ static uint8_t ds18b20_readbit(ds18b20_bus_t bus)
     pin_rel(bus);
 	tick_wait_us(14);
 
-	/*read the value*/
 	if(pin_rd(bus)) data=1;
 
 	tick_wait_us(45);
@@ -191,7 +190,7 @@ static uint8_t ds18b20_readbyte(ds18b20_bus_t bus)
 
 static inline uint8_t pin_rd(ds18b20_bus_t bus)
 {
-    uint8_t pin_state;
+    uint8_t pin_state = 1;
     switch(bus) {
         case DS18B20_BUS_0: DS18B20_BUS0_RD(&pin_state); break;
         case DS18B20_BUS_1: DS18B20_BUS1_RD(&pin_state); break;
