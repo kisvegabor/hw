@@ -7,7 +7,7 @@
 
 
 #ifndef HW_CONF_H
-#define HW_CONF_H
+#define HW_CONF_H  
 
 /*********************
  *   PERIPHERY CONFIG
