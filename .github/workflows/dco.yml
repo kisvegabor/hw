@@ -1,8 +1,8 @@
 name: Merge master branch to dev
 on:
-  push:
+  pull_request:
     branches:
-      - 'master'
+      - '*'
 jobs:
   AutoComment:
     runs-on: ubuntu-latest
