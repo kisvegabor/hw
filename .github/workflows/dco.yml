@@ -7,11 +7,12 @@ jobs:
   AutoComment:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/first-interaction@v1
-    - name: yaml-lint
-      with:
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
-        pr-message: |
-          Thank you for raising your pull request. 
-          
-          Test auto comment.
+      - uses: actions/first-interaction@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          pr-message: |
+            Thank you for raising your pull request.
+      
+            Test auto comment.
+
+
