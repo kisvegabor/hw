@@ -2,4 +2,7 @@ steps:
 - uses: actions/first-interaction@v1
   with:
     repo-token: ${{ secrets.GITHUB_TOKEN }}
-    pr-message: 'Message that will be displayed on users' first pr. Look, a `code block` for markdown.'
+    pr-message: |
+      Thank you for raising your pull request.
+      
+      Test auto comment.
